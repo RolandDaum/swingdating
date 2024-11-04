@@ -31,7 +31,7 @@ public class Titlebar extends JPanel {
 
         // Title
         titleLabel = new JLabel("", SwingConstants.LEFT);
-        titleLabel.setFont(appdesign.fonts.get("Orbitron Regular").deriveFont(12f));
+        titleLabel.setFont(appdesign.fonts.get("Orbitron Medium").deriveFont(12f));
         
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, appdesign.titlebarHeight/2, 0, 0)); // Linker Abstand von 10 Pixeln
@@ -96,12 +96,9 @@ public class Titlebar extends JPanel {
         if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
             frame.setExtendedState(JFrame.NORMAL);
             maximizeButton.setButtonIcon(appdesign.AssetName_Icon_Titlebar_Maximize);
-            App.updateDefaultWindowShape();
         } else {
-
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             maximizeButton.setButtonIcon(appdesign.AssetName_Icon_Titlebar_Exitmaximize);
-            App.setWindowShape(appdesign.getFullscreenWindowsShape(frame.getWidth(), frame.getHeight()));
         }
     }
 

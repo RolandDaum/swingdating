@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AppDesign {
+    // COLORS
     public Color Color_BackgroundMain;
     public Color Color_BackgroundContainer;
     public Color Color_BackgroundOnContainer;
@@ -22,9 +23,13 @@ public class AppDesign {
     public Color Color_BorderDark;
     public Color Color_BorderLight;
 
+    // SIZES
     public int titlebarHeight = 35;
     public int windowDragableBorderSize = 10;
+    public int inputFieldHeight = 35;
+    public int inputFieldWidth = 150;
     
+    // ASSETS
     public String AssetName_Icon_Titlebar_Exitmaximize = "Icon_Titlebar_ExitMaximize.png";
     public String AssetName_Icon_Titlebar_Close = "Icon_Titlebar_Close.png";
     public String AssetName_Icon_Titlebar_Maximize = "Icon_Titlebar_Maximize.png";
@@ -61,7 +66,7 @@ public class AppDesign {
         // Load all fonts
         for (String fontname : fontlist) {
             try {
-                Font tmpfont = Font.createFont(Font.TRUETYPE_FONT, new File("E:/swingdating/src/com/swingdating/assets/font/" + fontname));
+                Font tmpfont = Font.createFont(Font.TRUETYPE_FONT, new File("src/com/swingdating/assets/font/" + fontname));
                 System.out.println(tmpfont.getFontName());
                 fonts.put(tmpfont.getFontName(), tmpfont);
             } catch (FontFormatException | IOException e) {
@@ -79,8 +84,8 @@ public class AppDesign {
             this.Color_AccentPrimary =  new Color(242,235,210);
             this.Color_AccentSecondary =  new Color(249,4,6);
             this.Color_AccentTertiary =  new Color(246,182,83);
-            this.Color_BorderDark =  new Color(0,0,0);
-            this.Color_BorderLight =  new Color(45,45,45);
+            this.Color_BorderDark =  new Color(7,7,7);
+            this.Color_BorderLight =  new Color(24,24,24);
         }
         else {
             this.Color_BackgroundMain = new Color(248, 248, 248);

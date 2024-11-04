@@ -17,6 +17,9 @@ import com.swingdating.System.AppDesign;
 import com.swingdating.System.DBManagerSQLite;
 import com.swingdating.pages.PageHome;
 import com.swingdating.pages.PageLogin;
+
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -38,7 +41,8 @@ public class App extends JFrame {
     // Resizeable Frame stuff
     private int prevMX;
     private int prevMY;
-    private boolean resizing_horz = false;
+    private boolean resizing_horzL = false;
+    private boolean resizing_horzR = false;
     private boolean resizing_vert = false;
 
     public static void main(String[] args) {
@@ -78,50 +82,41 @@ public class App extends JFrame {
 
         setBackground(appdesign.Color_BackgroundMain);
 
-
-
-
-
-
         // Resize Eventlisteners
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (Math.abs(e.getX()-getWidth()) < appdesign.windowDragableBorderSize && Math.abs(e.getY()-getHeight()) < appdesign.windowDragableBorderSize) {
-                    resizing_horz = true;
-                    resizing_vert = true;
-                } else if (Math.abs(e.getX()-getWidth()) < appdesign.windowDragableBorderSize) {
-                    resizing_horz = true;
-                    resizing_vert = false;
-                } else if (Math.abs(e.getY()-getHeight()) < appdesign.windowDragableBorderSize) {
-                    resizing_horz = false;
-                    resizing_vert = true;
-                }
                 prevMX = e.getX();
                 prevMY = e.getY();
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                resizing_horz = false;
+                resizing_horzL = false;
+                resizing_horzR = false;
                 resizing_vert = false;
             }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                setCursor(Cursor.DEFAULT_CURSOR);
-                super.mouseExited(e);
-            }
         });
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                if (Math.abs(e.getX()-getWidth()) < appdesign.windowDragableBorderSize && Math.abs(e.getY()-getHeight()) < appdesign.windowDragableBorderSize) {
+                if (getExtendedState() == JFrame.MAXIMIZED_BOTH) {
+                    return;
+                }
+                resizing_horzL = e.getX() < appdesign.windowDragableBorderSize ? true : false;
+                resizing_horzR = Math.abs(e.getX()-getWidth()) < appdesign.windowDragableBorderSize ? true : false;
+                resizing_vert = Math.abs(e.getY()-getHeight()) < appdesign.windowDragableBorderSize ? true : false;
+                if (!resizing_horzL && resizing_horzR && resizing_vert) {
                     setCursor(Cursor.SE_RESIZE_CURSOR);
-                } else if (Math.abs(e.getX()-getWidth()) < appdesign.windowDragableBorderSize) {
+                } else if (resizing_horzL && !resizing_horzR && resizing_vert) {
+                    setCursor(Cursor.SW_RESIZE_CURSOR);
+                } else if (!resizing_horzL && resizing_horzR && !resizing_vert) {
                     setCursor(Cursor.E_RESIZE_CURSOR);
-                } else if (Math.abs(e.getY()-getHeight()) < appdesign.windowDragableBorderSize) {
+                } else if (!resizing_horzL && !resizing_horzR && resizing_vert) {
                     setCursor(Cursor.S_RESIZE_CURSOR);
+                } else if (resizing_horzL && !resizing_horzR && !resizing_vert) {
+                    setCursor(Cursor.W_RESIZE_CURSOR);
                 } else {
                     setCursor(Cursor.DEFAULT_CURSOR);
                 }
@@ -129,38 +124,87 @@ public class App extends JFrame {
             }
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (resizing_horz && resizing_vert) {
-                    int deltaX = e.getX() - prevMX;
+                // Sout-East
+                if (!resizing_horzL && resizing_horzR && resizing_vert) {
                     int deltaY = e.getY() - prevMY;
+                    int deltaX = e.getX() - prevMX;
 
                     int newWidth = getWidth() + deltaX;
                     int newHeight = getHeight() + deltaY;
 
-                    setSize(newWidth, newHeight);
-                    updateDefaultWindowShape();                        
+                    if (newWidth > getMinimumSize().getWidth() && newHeight > getMinimumSize().getHeight()) {
+                        setSize(newWidth, newHeight);
+                    }
 
                     prevMX = e.getX();
                     prevMY = e.getY();
-                } else if (resizing_horz) {
+                } 
+                // South West
+                else if (resizing_horzL && !resizing_horzR && resizing_vert) {
                     int deltaX = e.getX() - prevMX;
+                    int deltaY = e.getY() - prevMY;
+
+                    int newWidth = getWidth() - deltaX;
+                    int newHeight = getHeight() + deltaY;
+
+                    if (newWidth > getMinimumSize().getWidth() && newHeight > getMinimumSize().getHeight() ) {
+                        System.out.println("now: " + Math.abs(newWidth-getWidth()));
+                        if (Math.abs(newWidth-getWidth()) >= 1) {
+                            setLocation(getX() + deltaX, getY());
+                        }
+                        setSize(newWidth, newHeight);
+                    }
+
+                    prevMX = e.getX();
+                    prevMY = e.getY();
+                }
+                // East
+                else if (!resizing_horzL && resizing_horzR && !resizing_vert) {
+                    int deltaX = e.getX() - prevMX;
+
                     int newWidth = getWidth() + deltaX;
-                    if (newWidth > 100) {
+                    if (newWidth > getMinimumSize().getWidth()) {
                         setSize(newWidth, getHeight());
-                        updateDefaultWindowShape();
                     }
                     prevMX = e.getX();
-                } else if (resizing_vert) {
+                } 
+                // West
+                else if (resizing_horzL && !resizing_horzR && !resizing_vert) {
+                    int deltaX = e.getX() - prevMX;
+                    int newWidth = getWidth() - deltaX;
+                    if (newWidth > getMinimumSize().getWidth()) {
+                        if (Math.abs(newWidth-getWidth()) >= 1) {
+                            setLocation(getX() + deltaX, getY());
+                        }
+                        setSize(newWidth, getHeight());
+                    }
+                    prevMX = e.getX();
+                }
+                // South
+                else if (!resizing_horzL && !resizing_horzR && resizing_vert) {
                     int deltaY = e.getY() - prevMY;
                     int newHeight = getHeight() + deltaY;
-                    if (newHeight > 100) {
+                    if (newHeight > getMinimumSize().getHeight()) {
                         setSize(getWidth(), newHeight);
-                        updateDefaultWindowShape();
                     }
                     prevMY = e.getY();
+                
+            
+                }
+        }});
+        
+        // Window size change listener (Rounden window corners)
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if ((getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH) {
+                    setFullscreenWindowShape();
+                } else {
+                    setDefaultWindowShape();
                 }
             }
         });
-        
+
         // setOpacity(0.5f);
         setVisible(true);
     }
@@ -173,16 +217,13 @@ public class App extends JFrame {
     private void setDefaultWindowShape() {
         setShape(appdesign.getDefaultWindowsShape(getWidth(), getHeight()));
     }
+    private void setFullscreenWindowShape() {
+        setWindowShape(appdesign.getFullscreenWindowsShape(getWidth(), getHeight()));  
+    }
     public static void setWindowShape(Shape shape) {
         App appInstance = (App) SwingUtilities.getWindowAncestor(mainPanel);
         if (appInstance != null && appInstance.titlebar != null) {
             appInstance.setShape(shape);
-        }
-    }
-    public static void updateDefaultWindowShape() {
-        App appInstance = (App) SwingUtilities.getWindowAncestor(mainPanel);
-        if (appInstance != null && appInstance.titlebar != null) {
-            appInstance.setShape(appInstance.appdesign.getDefaultWindowsShape(appInstance.getWidth(), appInstance.getHeight()));
         }
     }
 
@@ -201,5 +242,4 @@ public class App extends JFrame {
     public static App getAppInstance() {
         return (App) SwingUtilities.getWindowAncestor(mainPanel);
     }
-
 }

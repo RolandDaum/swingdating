@@ -1,77 +1,133 @@
-package  com.swingdating.Components;
-import  com.swingdating.System.AppDesign;
+package com.swingdating.Components;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import com.swingdating.System.AppDesign;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.function.Consumer;
 
-public class Inputfield extends JTextField {
-    private Color borderColor = Color.BLACK;
-    private int borderRadius = 20;
-    private int fontSize = 14;
+public class InputField extends JPanel {
+
+    private Consumer<String> onType;    // Changed to Consumer<String>
+    private Runnable onActive;
+    private Runnable onInactive;
+    private Runnable onSubmit;
+
+    private JTextField inputfield;
+
     private AppDesign appdesign;
 
-    public Inputfield(AppDesign appdesign) {
+    // TODO: Add multiple constructors
+    // TODO: Add input data types
+    public InputField(AppDesign appdesign, Boolean passwordfield) {
         this.appdesign = appdesign;
-        setOpaque(false);
-        setFont(new Font("Arial", Font.PLAIN, fontSize));
-        addKeyListener(new KeyAdapter() {
+        inputfield = passwordfield ? new JPasswordField() {
             @Override
-            public void keyReleased(KeyEvent e) {
-                onInput();
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(appdesign.Color_BackgroundContainer);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        } : new JTextField() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(appdesign.Color_BackgroundContainer);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
+                g2.dispose();
+                super.paintComponent(g);
+            }};
+        
+        inputfield.setOpaque(false);
+        inputfield.setPreferredSize(new Dimension(appdesign.inputFieldWidth, appdesign.inputFieldHeight));
+        inputfield.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        inputfield.setForeground(appdesign.Color_FontPrimary);
+        inputfield.setFont(appdesign.fonts.get("Roboto Bold").deriveFont(16f));
+        inputfield.setCaretColor(appdesign.Color_FontPrimary);
+
+        inputfield.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (onType != null) {
+                    onType.accept(inputfield.getText());
+                }
+            }
+
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (onType != null) {
+                    onType.accept(inputfield.getText());
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (onType != null) {
+                    onType.accept(inputfield.getText());
+                }
             }
         });
-        
-        // Listener für Focus-Events
-        addFocusListener(new FocusListener() {
+
+        inputfield.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                onFocus();
+                if (onActive != null) {
+                    onActive.run();
+                }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                onUnfocus();
+                if (onInactive != null) {
+                    onInactive.run();
+                }
             }
         });
+
+        setLayout(new GridBagLayout());
+        setBackground(null);
+        setPreferredSize(new Dimension(appdesign.inputFieldWidth + 2, appdesign.inputFieldHeight + 2));
+        add(inputfield);
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // Hintergrundfarbe und abgerundete Ecken zeichnen
-        g2.setColor(appdesign.Color_BackgroundSecondary);
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), this.borderRadius, this.borderRadius);
-
-        // Schriftfarbe festlegen
-        setForeground(appdesign.Color_FontPrimary);
-
         super.paintComponent(g);
-        g2.dispose();
-    }
-    @Override
-    protected void paintBorder(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g2.setColor(appdesign.Color_Accent);
-        g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, this.borderRadius, this.borderRadius);
-
+        g2.setColor(appdesign.Color_BorderLight);
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
         g2.dispose();
     }
 
-    protected void onInput() {
-        // System.out.println("Input detected: " + getText());
+    // Methoden zum Setzen der Events
+    public void onType(Consumer<String> onType) { // Change method signature
+        this.onType = onType;
     }
-    protected void onFocus() {
-        // System.out.println("Input field focused.");
+    public void onActive(Runnable onActive) {
+        this.onActive = onActive;
     }
-    protected void onUnfocus() {
-        // System.out.println("Input field unfocused.");
+    public void onInactive(Runnable onInactive) {
+        this.onInactive = onInactive;
+    }
+    public void onSubmit(Runnable onSubmit) {
+        this.onSubmit = onSubmit;
+    }
+
+    public String getValue() {
+        return inputfield.getText();    
     }
 }

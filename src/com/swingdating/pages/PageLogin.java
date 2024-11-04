@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.swingdating.App;
+import com.swingdating.Components.*;
 import  com.swingdating.System.AppDesign;
 
 public class PageLogin extends JPanel {
@@ -30,7 +31,19 @@ public class PageLogin extends JPanel {
             }
         });
         homeButton.setBounds(0, 0, 55, 55);
+
         add(homeButton);
 
+        InputField usernameinputfield = new InputField(appdesign, false);
+        usernameinputfield.onType(value -> {
+            System.out.println(value);
+        });
+        add(usernameinputfield);
+
+        InputField passwordinputfield = new InputField(appdesign, true);
+        passwordinputfield.onType(value -> {
+            System.out.println(value);
+        });
+        add(passwordinputfield);
     }
 }
