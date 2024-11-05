@@ -1,10 +1,8 @@
 package com.swingdating.pages;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
-
 import com.swingdating.App;
 import com.swingdating.System.AppDesign;
 

@@ -1,9 +1,5 @@
 package com.swingdating.Components;
-
 import javax.swing.*;
-import javax.swing.text.StyledEditorKit;
-
-import com.swingdating.App;
 import com.swingdating.System.AppDesign;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -25,14 +21,12 @@ public class Titlebar extends JPanel {
         this.appdesign = appdesign;
         setLayout(new BorderLayout());
         setBackground(appdesign.Color_BackgroundMain);
-        // setBackground(appdesign.Color_BackgroundContainer);
 
         setPreferredSize(new Dimension(0, appdesign.titlebarHeight));
 
         // Title
         titleLabel = new JLabel("", SwingConstants.LEFT);
         titleLabel.setFont(appdesign.fonts.get("Orbitron Medium").deriveFont(12f));
-        
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, appdesign.titlebarHeight/2, 0, 0)); // Linker Abstand von 10 Pixeln
         add(titleLabel, BorderLayout.CENTER);
@@ -48,7 +42,6 @@ public class Titlebar extends JPanel {
         buttonPanel.add(maximizeButton);
         buttonPanel.add(createButton(appdesign.AssetName_Icon_Titlebar_Close, e -> frame.dispose(), true));
 
-        // Add Button Panel
         add(buttonPanel, BorderLayout.EAST);
 
         // Drag functionality

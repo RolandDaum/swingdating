@@ -36,13 +36,11 @@ public class PageLogin extends JPanel {
 
         InputField usernameinputfield = new InputField(appdesign, false);
         usernameinputfield.onType(value -> {
-            System.out.println(value);
         });
         add(usernameinputfield);
 
         InputField passwordinputfield = new InputField(appdesign, true);
         passwordinputfield.onType(value -> {
-            System.out.println(value);
         });
         add(passwordinputfield);
     }

@@ -1,6 +1,5 @@
 package  com.swingdating.System;
 import java.awt.geom.RoundRectangle2D;
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

@@ -6,12 +6,11 @@ import javax.swing.event.DocumentListener;
 
 import com.swingdating.System.AppDesign;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.text.NumberFormat.Style;
 import java.util.function.Consumer;
 
 public class InputField extends JPanel {
@@ -19,7 +18,7 @@ public class InputField extends JPanel {
     private Consumer<String> onType;    // Changed to Consumer<String>
     private Runnable onActive;
     private Runnable onInactive;
-    private Runnable onSubmit;
+    private Consumer<String> onSubmit;
 
     private JTextField inputfield;
 
@@ -57,6 +56,7 @@ public class InputField extends JPanel {
         inputfield.setFont(appdesign.fonts.get("Roboto Bold").deriveFont(16f));
         inputfield.setCaretColor(appdesign.Color_FontPrimary);
 
+        // on insert/remove/update Listener
         inputfield.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -64,7 +64,6 @@ public class InputField extends JPanel {
                     onType.accept(inputfield.getText());
                 }
             }
-
 
             @Override
             public void removeUpdate(DocumentEvent e) {
@@ -80,7 +79,7 @@ public class InputField extends JPanel {
                 }
             }
         });
-
+        // On focus gained/lost Listener
         inputfield.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -93,6 +92,15 @@ public class InputField extends JPanel {
             public void focusLost(FocusEvent e) {
                 if (onInactive != null) {
                     onInactive.run();
+                }
+            }
+        });
+        // On Submit Listener
+        inputfield.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (onSubmit != null) {
+                    onSubmit.accept(inputfield.getText());
                 }
             }
         });
@@ -123,10 +131,10 @@ public class InputField extends JPanel {
     public void onInactive(Runnable onInactive) {
         this.onInactive = onInactive;
     }
-    public void onSubmit(Runnable onSubmit) {
+    public void onSubmit(Consumer<String> onSubmit) {
         this.onSubmit = onSubmit;
     }
-
+    
     public String getValue() {
         return inputfield.getText();    
     }
