@@ -10,10 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import com.swingdating.Components.Titlebar;
+import com.swingdating.Pages.PageHome;
+import com.swingdating.Pages.PageLogin;
 import com.swingdating.System.AppDesign;
 import com.swingdating.System.DBManagerSQLite;
-import com.swingdating.pages.PageHome;
-import com.swingdating.pages.PageLogin;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -57,6 +57,9 @@ public class App extends JFrame {
         setSize(500, 500);
         setMinimumSize(new Dimension(750, 500));
         setTitle("SwingDating");
+        setBackground(appdesign.Color_BackgroundMain);
+
+        // Load AppIcon
         try {
             setIconImage(ImageIO.read(new File("src/com/swingdating/assets/icon.png")));
         } catch (IOException e) {
@@ -224,14 +227,10 @@ public class App extends JFrame {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (getExtendedState() == JFrame.MAXIMIZED_BOTH) {
-                    setFullscreenWindowShape();
-                } else {
-                    setDefaultWindowShape();
-                }
+                updateWindow();
             }
         });
-        setDefaultWindowShape();
+        updateWindow();
 
         // setOpacity(0.5f);
         setVisible(true);
@@ -245,19 +244,24 @@ public class App extends JFrame {
         rootpanel.setBounds(2, 2, getWidth() - 4, getHeight() - 4);
         rootpanel.revalidate();
         rootpanel.repaint();
-
     }
-    private void setFullscreenWindowShape() {
+    public void setFullscreenWindowShape() {
         setShape(appdesign.getFullscreenWindowsShape(getWidth(), getHeight()));
+        // getContentPane().setBackground(appdesign.Color_BorderLight);
         rootpanel.setBackground(appdesign.Color_BackgroundMain);
         rootpanel.setBounds(0, 0, getWidth(), getHeight());
         rootpanel.revalidate();
         rootpanel.repaint();
     }
-    public static void setWindowShape(Shape shape) {
-        App appInstance = (App) SwingUtilities.getWindowAncestor(mainPanel);
-        if (appInstance != null && appInstance.titlebar != null) {
-            appInstance.setShape(shape);
+
+    public static void updateWindow() {
+        App appInstance = getAppInstance();
+        if (appInstance == null) {return;}
+
+        if (appInstance.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
+            appInstance.setFullscreenWindowShape();
+        } else {
+            appInstance.setDefaultWindowShape();
         }
     }
     
@@ -268,10 +272,11 @@ public class App extends JFrame {
     public static void switchToPage(String pageName) {
         mainPanelCardLayout.show(mainPanel, pageName);
         setWindowsTitle(pageName);
+        updateWindow();
     }
 
     public static void setWindowsTitle(String title) {
-        App appInstance = (App) SwingUtilities.getWindowAncestor(mainPanel);
+        App appInstance = getAppInstance();
         if (appInstance != null && appInstance.titlebar != null) {
             appInstance.titlebar.setTitle(title);
         }

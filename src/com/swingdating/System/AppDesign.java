@@ -25,14 +25,15 @@ public class AppDesign {
     // SIZES
     public int titlebarHeight = 35;
     public int windowDragableBorderSize = 10;
-    public int inputFieldHeight = 35;
-    public int inputFieldWidth = 150;
+    public int inputFieldHeight = 45;
+    public int inputFieldWidth = 225;
     
     // ASSETS
     public String AssetName_Icon_Titlebar_Exitmaximize = "Icon_Titlebar_ExitMaximize.png";
     public String AssetName_Icon_Titlebar_Close = "Icon_Titlebar_Close.png";
     public String AssetName_Icon_Titlebar_Maximize = "Icon_Titlebar_Maximize.png";
     public String AssetName_Icon_Titlebar_Minimize = "Icon_Titlebar_Minimize.png";
+    public Character PasswordFiledChar = '*';
 
     public Boolean darkmodeenabled;
 
@@ -84,7 +85,7 @@ public class AppDesign {
             this.Color_AccentSecondary =  new Color(249,4,6);
             this.Color_AccentTertiary =  new Color(246,182,83);
             this.Color_BorderDark =  new Color(7,7,7);
-            this.Color_BorderLight =  new Color(24,24,24);
+            this.Color_BorderLight =  new Color(34,34,34);
         }
         else {
             this.Color_BackgroundMain = new Color(248, 248, 248);

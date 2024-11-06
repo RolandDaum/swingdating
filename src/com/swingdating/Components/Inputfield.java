@@ -21,6 +21,7 @@ public class InputField extends JPanel {
     private Consumer<String> onSubmit;
 
     private JTextField inputfield;
+    private JPasswordField inputfieldPassword;
 
     private AppDesign appdesign;
 
@@ -28,33 +29,49 @@ public class InputField extends JPanel {
     // TODO: Add input data types
     public InputField(AppDesign appdesign, Boolean passwordfield) {
         this.appdesign = appdesign;
-        inputfield = passwordfield ? new JPasswordField() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(appdesign.Color_BackgroundContainer);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
-                g2.dispose();
-                super.paintComponent(g);
-            }
-        } : new JTextField() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(appdesign.Color_BackgroundContainer);
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
-                g2.dispose();
-                super.paintComponent(g);
-            }};
+   
+        setLayout(new GridBagLayout());
+        setBackground(null);
+        setPreferredSize(new Dimension(appdesign.inputFieldWidth,appdesign.inputFieldHeight));
+        setMaximumSize(new Dimension(appdesign.inputFieldWidth,appdesign.inputFieldHeight));
+
+        if (passwordfield) {
+            inputfieldPassword = new JPasswordField() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2.setColor(appdesign.Color_BackgroundContainer);
+                    g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
+                    g2.dispose();
+                    super.paintComponent(g);
+                }
+            };
+            inputfield = inputfieldPassword;
+        } else {
+            inputfield = new JTextField() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2.setColor(appdesign.Color_BackgroundContainer);
+                    g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
+                    g2.dispose();
+                    super.paintComponent(g);
+                }};
+        }
+        // Set incognito char for password field
+        if (passwordfield) {
+            inputfieldPassword.setEchoChar(appdesign.PasswordFiledChar);
+        }
         
         inputfield.setOpaque(false);
-        inputfield.setPreferredSize(new Dimension(appdesign.inputFieldWidth, appdesign.inputFieldHeight));
-        inputfield.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        inputfield.setPreferredSize(new Dimension(appdesign.inputFieldWidth-2, appdesign.inputFieldHeight-2));
+        inputfield.setBorder(BorderFactory.createEmptyBorder(0, appdesign.inputFieldHeight/3, 0, appdesign.inputFieldHeight/3)); // Inner padding
         inputfield.setForeground(appdesign.Color_FontPrimary);
         inputfield.setFont(appdesign.fonts.get("Roboto Bold").deriveFont(16f));
         inputfield.setCaretColor(appdesign.Color_FontPrimary);
+        inputfield.setBounds(1, 1, getWidth()-2, getHeight()-2);
 
         // on insert/remove/update Listener
         inputfield.getDocument().addDocumentListener(new DocumentListener() {
@@ -105,9 +122,7 @@ public class InputField extends JPanel {
             }
         });
 
-        setLayout(new GridBagLayout());
-        setBackground(null);
-        setPreferredSize(new Dimension(appdesign.inputFieldWidth + 2, appdesign.inputFieldHeight + 2));
+
         add(inputfield);
     }
 
@@ -116,9 +131,10 @@ public class InputField extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(appdesign.Color_BorderLight);
+        g2.setColor(appdesign.Color_BorderLight); // This changes the bordre color
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
         g2.dispose();
+
     }
 
     // Methoden zum Setzen der Events

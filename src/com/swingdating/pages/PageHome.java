@@ -1,4 +1,4 @@
-package com.swingdating.pages;
+package com.swingdating.Pages;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;

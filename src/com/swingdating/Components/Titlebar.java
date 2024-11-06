@@ -1,5 +1,7 @@
 package com.swingdating.Components;
 import javax.swing.*;
+
+import com.swingdating.App;
 import com.swingdating.System.AppDesign;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -26,8 +28,8 @@ public class Titlebar extends JPanel {
 
         // Title
         titleLabel = new JLabel("", SwingConstants.LEFT);
-        titleLabel.setFont(appdesign.fonts.get("Orbitron Medium").deriveFont(12f));
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(appdesign.fonts.get("Orbitron Medium").deriveFont(16f));
+        titleLabel.setForeground(appdesign.Color_AccentPrimary);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, appdesign.titlebarHeight/2, 0, 0)); // Linker Abstand von 10 Pixeln
         add(titleLabel, BorderLayout.CENTER);
 
@@ -56,19 +58,15 @@ public class Titlebar extends JPanel {
                 if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
                     // Calculating the horizontal click position as a decimal number
                     float xpercentage = (1/ (float) frame.getWidth())*(float)e.getX();
-
                     // Changeing the frames status
                     toggleMaximize(frame);
-
                     // calculating the new position of the x value with a new window with
                     int value = (int) (xpercentage*frame.getWidth());
                     int marginwith = (appdesign.titlebarHeight-5)*3+3*5+15;
                     mouseX = getX()+ (value > frame.getWidth()-marginwith ? frame.getWidth()-marginwith : value); // Checks if the new x position would end up in the titlebar action buttons
                     mouseY = getY()+e.getY();
-
                 }
-                    frame.setLocation(e.getXOnScreen() - mouseX, e.getYOnScreen() - mouseY);
-
+                frame.setLocation(e.getXOnScreen() - mouseX, e.getYOnScreen() - mouseY);
             }
         });
     }
@@ -93,6 +91,7 @@ public class Titlebar extends JPanel {
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             maximizeButton.setButtonIcon(appdesign.AssetName_Icon_Titlebar_Exitmaximize);
         }
+        App.updateWindow();
     }
 
     public void setTitle(String title) {

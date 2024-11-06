@@ -1,47 +1,64 @@
-package  com.swingdating.pages;
+package com.swingdating.Pages;
 
-import javax.swing.JButton;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.GroupLayout.Alignment;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import com.swingdating.App;
-import com.swingdating.Components.*;
-import  com.swingdating.System.AppDesign;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import com.swingdating.Components.Button;
+import com.swingdating.Components.InputField;
+import com.swingdating.Components.InputLabel;
+import com.swingdating.System.AppDesign;
 
 public class PageLogin extends JPanel {
     public static String pagename = "SWINGDATING - LOGIN";
 
-    private AppDesign appdesign;
+    private JPanel rootpanel;
 
     public PageLogin(AppDesign appdesign) {
-        this.appdesign = appdesign;
 
-        setName(pagename); // Ensure unique name
+        setName(pagename);
         setBackground(appdesign.Color_BackgroundMain);
+        setLayout(new GridBagLayout());
 
-        JButton homeButton = new JButton("Go to Home");
-        homeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                App.switchToPage(PageHome.pagename);
-                // App.setWindowsTitle("Hello world Title");
-                // App.toggleAppTheme();
-            }
-        });
-        homeButton.setBounds(0, 0, 55, 55);
+        rootpanel = new JPanel();
+        rootpanel.setLayout(new BoxLayout(rootpanel, BoxLayout.Y_AXIS)); // Hier kannst du BoxLayout belassen
+        rootpanel.setBackground(appdesign.Color_BackgroundMain);
 
-        add(homeButton);
+        InputLabel inpl_username = new InputLabel("username", appdesign);
+        InputField inputfield_Username = new InputField(appdesign, false);
+        InputLabel inpl_password = new InputLabel("password", appdesign);
+        InputField inputfield_Password = new InputField(appdesign, true);
+        Button button = new Button("login / register", appdesign);
 
-        InputField usernameinputfield = new InputField(appdesign, false);
-        usernameinputfield.onType(value -> {
-        });
-        add(usernameinputfield);
+        // Setze FlowLayout für die Labels, um sie links auszurichten
+        JPanel usernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, appdesign.inputFieldHeight/3, appdesign.inputFieldHeight/6)); // Ausrichtung nach links
+        usernamePanel.setBackground(appdesign.Color_BackgroundMain);
+        usernamePanel.add(inpl_username);
 
-        InputField passwordinputfield = new InputField(appdesign, true);
-        passwordinputfield.onType(value -> {
-        });
-        add(passwordinputfield);
+        JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, appdesign.inputFieldHeight/3, appdesign.inputFieldHeight/6)); // Ausrichtung nach links
+        passwordPanel.setBackground(appdesign.Color_BackgroundMain);
+        passwordPanel.add(inpl_password);
+
+        rootpanel.add(usernamePanel);
+        rootpanel.add(inputfield_Username);
+        rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight/2));
+        rootpanel.add(passwordPanel);
+        rootpanel.add(inputfield_Password);
+        rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight/2));
+        rootpanel.add(new JLabel(" "));
+        
+        // Button mittig ausrichten
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rootpanel.add(button);
+        rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight));
+
+        add(rootpanel);
     }
 }
+
