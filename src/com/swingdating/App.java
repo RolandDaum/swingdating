@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import com.swingdating.Components.Titlebar;
 import com.swingdating.Pages.PageHome;
 import com.swingdating.Pages.PageLogin;
+import com.swingdating.Pages.PageRegister;
 import com.swingdating.System.AppDesign;
 import com.swingdating.System.DBManagerSQLite;
 
@@ -26,7 +27,6 @@ import java.io.IOException;
 
 public class App extends JFrame {
 
-    static DBManagerSQLite dbmanager = new DBManagerSQLite("jdbc:sqlite:src/schule_erweitert.db");
     private boolean darkmodeenabled = true;
     public AppDesign appdesign = new AppDesign(darkmodeenabled);
     private Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -98,7 +98,7 @@ public class App extends JFrame {
         }
 
         // Load first Page from Panel list
-        mainPanelCardLayout.show(mainPanel, mainPanelPages.get(0).getName());
+        mainPanelCardLayout.show(mainPanel, "SWINGDATING - LOGIN");
 
         // Create Titlebar
         titlebar = new Titlebar(this, appdesign, mainPanelPages.get(0).getName());
@@ -136,8 +136,8 @@ public class App extends JFrame {
                 resizing_horzL = e.getX() < appdesign.windowDragableBorderSize ? true : false;
                 resizing_horzR = Math.abs(e.getX()-getWidth()) < appdesign.windowDragableBorderSize ? true : false;
                 resizing_vertB = Math.abs(e.getY()-getHeight()) < appdesign.windowDragableBorderSize ? true : false;
-                // TODO: Add top vertical rezisement
                 resizing_vertT = e.getY() < appdesign.windowDragableBorderSize ? true : false;
+                
                 if (!resizing_horzL && resizing_horzR && resizing_vertB) {
                     setCursor(Cursor.SE_RESIZE_CURSOR);
                 } else if (resizing_horzL && !resizing_horzR && resizing_vertB) {
@@ -253,7 +253,6 @@ public class App extends JFrame {
         rootpanel.revalidate();
         rootpanel.repaint();
     }
-
     public static void updateWindow() {
         App appInstance = getAppInstance();
         if (appInstance == null) {return;}
@@ -267,6 +266,7 @@ public class App extends JFrame {
     
     private void createPages() {
         mainPanelPages.add(new PageLogin(appdesign));
+        mainPanelPages.add(new PageRegister(appdesign));
         mainPanelPages.add(new PageHome(appdesign));
     }
     public static void switchToPage(String pageName) {

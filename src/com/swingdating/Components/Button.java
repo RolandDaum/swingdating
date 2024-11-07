@@ -3,16 +3,19 @@ import com.swingdating.App;
 import com.swingdating.System.AppDesign;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 public class Button extends JButton {
 
     private AppDesign appdesign;
 
-    public Button(String title, AppDesign appdesign) {
+    public Button(String title, AppDesign appdesign, Runnable onclick) {
         super(title);
         this.appdesign = appdesign;
 
@@ -41,6 +44,12 @@ public class Button extends JButton {
             public void mouseExited(MouseEvent e) {
                 setBackground(appdesign.Color_BackgroundContainer);
                 App.getAppInstance().setCursor(Cursor.DEFAULT_CURSOR);
+            }
+        });
+        addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onclick.run();
             }
         });
     }

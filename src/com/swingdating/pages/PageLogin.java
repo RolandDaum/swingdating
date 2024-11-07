@@ -4,16 +4,14 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.GroupLayout.Alignment;
-
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import com.swingdating.Components.Button;
 import com.swingdating.Components.InputField;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.LRManager;
 
 public class PageLogin extends JPanel {
     public static String pagename = "SWINGDATING - LOGIN";
@@ -21,7 +19,7 @@ public class PageLogin extends JPanel {
     private JPanel rootpanel;
 
     public PageLogin(AppDesign appdesign) {
-
+        // LAYOUT AND DESIGN
         setName(pagename);
         setBackground(appdesign.Color_BackgroundMain);
         setLayout(new GridBagLayout());
@@ -34,7 +32,7 @@ public class PageLogin extends JPanel {
         InputField inputfield_Username = new InputField(appdesign, false);
         InputLabel inpl_password = new InputLabel("password", appdesign);
         InputField inputfield_Password = new InputField(appdesign, true);
-        Button button = new Button("login / register", appdesign);
+        Button button = new Button("login / register", appdesign, () -> LRManager.credentialCheck(inputfield_Username.getValue(), inputfield_Password.getValue()));
 
         // Setze FlowLayout für die Labels, um sie links auszurichten
         JPanel usernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, appdesign.inputFieldHeight/3, appdesign.inputFieldHeight/6)); // Ausrichtung nach links
@@ -59,6 +57,11 @@ public class PageLogin extends JPanel {
         rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight));
 
         add(rootpanel);
+
+
+        
     }
+
+
 }
 
