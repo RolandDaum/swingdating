@@ -6,16 +6,30 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class PasswordHash {
+
     private String password_hash;
     private String password_salt;
     
+    /**
+     * Creates a completly new PasswordHash
+     * @param password
+     */
     public PasswordHash(String password) {
         this.password_salt = generateSalt();
         this.password_hash = generateSaltedHash(password, this.password_salt);
     }
+    /**
+     * Generates a new PasswordHash with a given salt String
+     * @param password Password as String
+     * @param password_salt Password Salt as String
+     */
     public PasswordHash(String password, String password_salt) {
         this.password_salt = password_salt;
         this.password_hash = generateSaltedHash(password, this.password_salt);
+    }
+    public PasswordHash(String password_hash, String password_salt, boolean hashsalt) {
+        this.password_hash =  password_hash;
+        this.password_salt = password_salt;
     }
     
     private String generateSalt() {
@@ -33,12 +47,10 @@ public class PasswordHash {
         }
     }
 
-    public static boolean verifyPassword(String password, PasswordHash storedPasswordHash) {
-        return (new PasswordHash(password, storedPasswordHash.getPasswordSalt())).getPasswordHash().equals(storedPasswordHash.getPasswordHash());
+    public static boolean verifyPassword(PasswordHash userPasswordHash, PasswordHash storesPasswordHash) {
+        return userPasswordHash.getPasswordHash().equals(storesPasswordHash.getPasswordHash());
     }
-    public static boolean verifyPassword(String password, String passwordHash, String passwordSalt) {
-        return (new PasswordHash(password, passwordSalt)).getPasswordHash().equals(passwordHash);
-    }
+
 
     public String getPasswordHash() {
         return this.password_hash;

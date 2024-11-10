@@ -15,6 +15,8 @@ import com.swingdating.System.LRManager;
 
 public class PageLogin extends JPanel {
     public static String pagename = "SWINGDATING - LOGIN";
+    InputField inputfield_Username;
+    InputField inputfield_Password;
 
     private JPanel rootpanel;
 
@@ -24,25 +26,27 @@ public class PageLogin extends JPanel {
         setBackground(appdesign.Color_BackgroundMain);
         setLayout(new GridBagLayout());
 
-        rootpanel = new JPanel();
-        rootpanel.setLayout(new BoxLayout(rootpanel, BoxLayout.Y_AXIS)); // Hier kannst du BoxLayout belassen
-        rootpanel.setBackground(appdesign.Color_BackgroundMain);
+        inputfield_Username = new InputField(appdesign, false);
+        inputfield_Password = new InputField(appdesign, true);
+        Button button = new Button("login / register", appdesign, () -> login());
 
         InputLabel inpl_username = new InputLabel("username", appdesign);
-        InputField inputfield_Username = new InputField(appdesign, false);
-        InputLabel inpl_password = new InputLabel("password", appdesign);
-        InputField inputfield_Password = new InputField(appdesign, true);
-        Button button = new Button("login / register", appdesign, () -> LRManager.credentialCheck(inputfield_Username.getValue(), inputfield_Password.getValue()));
-
-        // Setze FlowLayout für die Labels, um sie links auszurichten
         JPanel usernamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, appdesign.inputFieldHeight/3, appdesign.inputFieldHeight/6)); // Ausrichtung nach links
         usernamePanel.setBackground(appdesign.Color_BackgroundMain);
         usernamePanel.add(inpl_username);
+        inputfield_Username.onSubmit((value) -> inputfield_Password.setFocus());
 
+        InputLabel inpl_password = new InputLabel("password", appdesign);
         JPanel passwordPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, appdesign.inputFieldHeight/3, appdesign.inputFieldHeight/6)); // Ausrichtung nach links
         passwordPanel.setBackground(appdesign.Color_BackgroundMain);
         passwordPanel.add(inpl_password);
+        inputfield_Password.onSubmit((value) -> {button.doClick(); inputfield_Password.removeFocus();});
 
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        rootpanel = new JPanel();
+        rootpanel.setLayout(new BoxLayout(rootpanel, BoxLayout.Y_AXIS));
+        rootpanel.setBackground(appdesign.Color_BackgroundMain);
         rootpanel.add(usernamePanel);
         rootpanel.add(inputfield_Username);
         rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight/2));
@@ -50,18 +54,15 @@ public class PageLogin extends JPanel {
         rootpanel.add(inputfield_Password);
         rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight/2));
         rootpanel.add(new JLabel(" "));
-        
-        // Button mittig ausrichten
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
         rootpanel.add(button);
-        rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight));
+        rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight/2));
 
         add(rootpanel);
-
-
-        
+    }
+    private void login() {
+        if (!inputfield_Username.getValue().isEmpty() && !inputfield_Password.getValue().isEmpty()) {
+            LRManager.credentialCheck(inputfield_Username.getValue(), inputfield_Password.getValue());   
+        }
     }
 
-
 }
-

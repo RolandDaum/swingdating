@@ -3,19 +3,16 @@ package com.swingdating;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
 import com.swingdating.Components.Titlebar;
 import com.swingdating.Pages.PageHome;
 import com.swingdating.Pages.PageLogin;
 import com.swingdating.Pages.PageRegister;
 import com.swingdating.System.AppDesign;
 import com.swingdating.System.DBManagerSQLite;
-
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
@@ -26,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class App extends JFrame {
+    public static DBManagerSQLite db = new DBManagerSQLite("jdbc:sqlite:src/com/swingdating/database.db");
 
     private boolean darkmodeenabled = true;
     public AppDesign appdesign = new AppDesign(darkmodeenabled);
@@ -54,8 +52,7 @@ public class App extends JFrame {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
-        setSize(500, 500);
-        setMinimumSize(new Dimension(750, 500));
+        setMinimumSize(new Dimension(850, 500));
         setTitle("SwingDating");
         setBackground(appdesign.Color_BackgroundMain);
 
@@ -75,16 +72,14 @@ public class App extends JFrame {
         rootpanel = new JPanel(){
             @Override
             protected void paintComponent(Graphics g) {
-
-                super.paintComponent(g);
+                // super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setClip(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), appdesign.titlebarHeight, appdesign.titlebarHeight));
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.inputFieldHeight, appdesign.inputFieldHeight);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.BorderRadiusWindow-appdesign.BorderThicknessWindow, appdesign.BorderRadiusWindow-appdesign.BorderThicknessWindow);
             }
         };
         rootpanel.setOpaque(true);
-        rootpanel.setBounds(2, 2, getWidth() - 4, getHeight() - 4);
         rootpanel.setLayout(new BorderLayout());
 
         // Create Main Pages Stuff
@@ -98,7 +93,7 @@ public class App extends JFrame {
         }
 
         // Load first Page from Panel list
-        mainPanelCardLayout.show(mainPanel, "SWINGDATING - LOGIN");
+        mainPanelCardLayout.show(mainPanel, "SWINGDATING - REGISTER");
 
         // Create Titlebar
         titlebar = new Titlebar(this, appdesign, mainPanelPages.get(0).getName());
@@ -238,20 +233,21 @@ public class App extends JFrame {
 
 
     private void setDefaultWindowShape() {
-        setShape(appdesign.getDefaultWindowsShape(getWidth(), getHeight()));
+        setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), appdesign.BorderRadiusWindow, appdesign.BorderRadiusWindow));
         getContentPane().setBackground(appdesign.Color_BorderLight);
         rootpanel.setBackground(appdesign.Color_BorderLight);
-        rootpanel.setBounds(2, 2, getWidth() - 4, getHeight() - 4);
-        rootpanel.revalidate();
-        rootpanel.repaint();
+        rootpanel.setBounds(appdesign.BorderThicknessWindow, appdesign.BorderThicknessWindow, getWidth() - (appdesign.BorderThicknessWindow*2), getHeight() - (appdesign.BorderThicknessWindow*2));
+        revalidate();
+        repaint();
     }
     public void setFullscreenWindowShape() {
         setShape(appdesign.getFullscreenWindowsShape(getWidth(), getHeight()));
         // getContentPane().setBackground(appdesign.Color_BorderLight);
         rootpanel.setBackground(appdesign.Color_BackgroundMain);
         rootpanel.setBounds(0, 0, getWidth(), getHeight());
-        rootpanel.revalidate();
-        rootpanel.repaint();
+        revalidate();
+        repaint();
+
     }
     public static void updateWindow() {
         App appInstance = getAppInstance();

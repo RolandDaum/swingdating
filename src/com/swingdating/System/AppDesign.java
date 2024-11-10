@@ -27,6 +27,10 @@ public class AppDesign {
     public int windowDragableBorderSize = 10;
     public int inputFieldHeight = 45;
     public int inputFieldWidth = 225;
+    public int BorderThickness = 1;
+    public int BorderThicknessWindow = 2;
+    public int BorderRadiusWindow = titlebarHeight+BorderThicknessWindow;
+    public int ScrollBarThickness = 6;
     
     // ASSETS
     public String AssetName_Icon_Titlebar_Exitmaximize = "Icon_Titlebar_ExitMaximize.png";

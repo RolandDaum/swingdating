@@ -23,7 +23,6 @@ public class Titlebar extends JPanel {
         this.appdesign = appdesign;
         setLayout(new BorderLayout());
         setBackground(appdesign.Color_BackgroundMain);
-
         setPreferredSize(new Dimension(0, appdesign.titlebarHeight));
 
         // Title
@@ -31,7 +30,6 @@ public class Titlebar extends JPanel {
         titleLabel.setFont(appdesign.fonts.get("Orbitron Medium").deriveFont(16f));
         titleLabel.setForeground(appdesign.Color_AccentPrimary);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, appdesign.titlebarHeight/2, 0, 0)); // Linker Abstand von 10 Pixeln
-        add(titleLabel, BorderLayout.CENTER);
 
         // Button Panel
         JPanel buttonPanel = new JPanel();
@@ -44,6 +42,7 @@ public class Titlebar extends JPanel {
         buttonPanel.add(maximizeButton);
         buttonPanel.add(createButton(appdesign.AssetName_Icon_Titlebar_Close, e -> frame.dispose(), true));
 
+        add(titleLabel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.EAST);
 
         // Drag functionality
@@ -82,7 +81,6 @@ public class Titlebar extends JPanel {
         return button;
     }
 
-    // TODO: Change from fullscreen to semifullscrenn with taskbar height.
     private void toggleMaximize(JFrame frame) {
         if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
             frame.setExtendedState(JFrame.NORMAL);
