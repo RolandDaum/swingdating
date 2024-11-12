@@ -27,7 +27,7 @@ public class PasswordHash {
         this.password_salt = password_salt;
         this.password_hash = generateSaltedHash(password, this.password_salt);
     }
-    public PasswordHash(String password_hash, String password_salt, boolean hashsalt) {
+    public PasswordHash(String password_hash, String password_salt, boolean hashNSalt) {
         this.password_hash =  password_hash;
         this.password_salt = password_salt;
     }
@@ -47,10 +47,9 @@ public class PasswordHash {
         }
     }
 
-    public static boolean verifyPassword(PasswordHash userPasswordHash, PasswordHash storesPasswordHash) {
-        return userPasswordHash.getPasswordHash().equals(storesPasswordHash.getPasswordHash());
+    public static boolean verifyPassword(PasswordHash userPWHash, String ComparingPWHash) {
+        return userPWHash.getPasswordHash().equals(ComparingPWHash);
     }
-
 
     public String getPasswordHash() {
         return this.password_hash;

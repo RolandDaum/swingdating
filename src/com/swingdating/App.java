@@ -12,6 +12,7 @@ import com.swingdating.Pages.PageHome;
 import com.swingdating.Pages.PageLogin;
 import com.swingdating.Pages.PageRegister;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.AppUser;
 import com.swingdating.System.DBManagerSQLite;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -23,7 +24,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class App extends JFrame {
-    public static DBManagerSQLite db = new DBManagerSQLite("jdbc:sqlite:src/com/swingdating/database.db");
+    public static DBManagerSQLite db = new DBManagerSQLite("jdbc:sqlite:src/com/swingdating/appdb.db");
+    public AppUser appuser;
 
     private boolean darkmodeenabled = true;
     public AppDesign appdesign = new AppDesign(darkmodeenabled);
@@ -93,7 +95,7 @@ public class App extends JFrame {
         }
 
         // Load first Page from Panel list
-        mainPanelCardLayout.show(mainPanel, "SWINGDATING - REGISTER");
+        mainPanelCardLayout.show(mainPanel, "SWINGDATING - LOGIN");
 
         // Create Titlebar
         titlebar = new Titlebar(this, appdesign, mainPanelPages.get(0).getName());
@@ -280,5 +282,12 @@ public class App extends JFrame {
 
     public static App getAppInstance() {
         return (App) SwingUtilities.getWindowAncestor(mainPanel);
+    }
+    
+    public static AppUser getAppUser() {
+        return App.getAppInstance().appuser;
+    }
+    public static void setAppUser(AppUser appuser) {
+        App.getAppInstance().appuser = appuser;
     }
 }
