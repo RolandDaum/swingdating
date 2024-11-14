@@ -1,7 +1,7 @@
 import java.util.UUID;
 
 import com.swingdating.System.DBManagerSQLite;
-import com.swingdating.System.PasswordHash;
+import com.swingdating.System.CredentialHash;
 
 public class DBRebuild {
     public static void neverrunthisunlessyouknowwhatyourdoingwhatyouprobalbydonot(String[] args) {
@@ -12,12 +12,12 @@ public class DBRebuild {
 
 
         for (int i = 1; i < dataOLD.length; i++) {
-            PasswordHash pwHash = new PasswordHash(dataOLD[i][2].replaceAll("\\s","").toLowerCase() + "." + dataOLD[i][1].replaceAll("\\s","").toLowerCase());
+            CredentialHash pwHash = new CredentialHash(dataOLD[i][2].replaceAll("\\s","").toLowerCase() + "." + dataOLD[i][1].replaceAll("\\s","").toLowerCase());
             String sql = "INSERT INTO appusers VALUES (" +
                     // "'" + dataOLD[i][0] + "', " +  // ID_number
                     "'" + UUID.randomUUID() + "', " +  // ID_number
                     "'" + dataOLD[i][2].replaceAll("\\s","").toLowerCase() + "." + dataOLD[i][1].replaceAll("\\s","").toLowerCase() + "', " +  // username
-                    "'" + pwHash.getPasswordHash() + "', " +  // password_hash
+                    "'" + pwHash.getCredentialHash() + "', " +  // password_hash
                     "'" + pwHash.getPasswordSalt() + "', " +  // password_salt
                     "'" + dataOLD[i][2] + "', " +  // first_name
                     "'" + dataOLD[i][1] + "', " +  // last_name

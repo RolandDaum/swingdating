@@ -5,29 +5,29 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-public class PasswordHash {
+public class CredentialHash {
 
     private String password_hash;
     private String password_salt;
     
     /**
-     * Creates a completly new PasswordHash
+     * Creates a completly new CredentialHash
      * @param password
      */
-    public PasswordHash(String password) {
+    public CredentialHash(String password) {
         this.password_salt = generateSalt();
         this.password_hash = generateSaltedHash(password, this.password_salt);
     }
     /**
-     * Generates a new PasswordHash with a given salt String
+     * Generates a new CredentialHash with a given salt String
      * @param password Password as String
      * @param password_salt Password Salt as String
      */
-    public PasswordHash(String password, String password_salt) {
+    public CredentialHash(String password, String password_salt) {
         this.password_salt = password_salt;
         this.password_hash = generateSaltedHash(password, this.password_salt);
     }
-    public PasswordHash(String password_hash, String password_salt, boolean hashNSalt) {
+    public CredentialHash(String password_hash, String password_salt, boolean hashNSalt) {
         this.password_hash =  password_hash;
         this.password_salt = password_salt;
     }
@@ -47,11 +47,14 @@ public class PasswordHash {
         }
     }
 
-    public static boolean verifyPassword(PasswordHash userPWHash, String ComparingPWHash) {
-        return userPWHash.getPasswordHash().equals(ComparingPWHash);
+    public boolean verifyPassword(String pwtocompare) {
+        return (new CredentialHash(pwtocompare, this.password_salt)).getCredentialHash().equals(password_hash);
+    }
+    public static boolean verifyPassword(CredentialHash userPWHash, String ComparingPWHash) {
+        return userPWHash.getCredentialHash().equals(ComparingPWHash);
     }
 
-    public String getPasswordHash() {
+    public String getCredentialHash() {
         return this.password_hash;
     }
     public String getPasswordSalt() {

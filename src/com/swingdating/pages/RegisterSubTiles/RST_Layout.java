@@ -9,12 +9,15 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SpringLayout.Constraints;
 import javax.swing.plaf.basic.BasicScrollBarUI;
+import com.swingdating.App;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.AppUser;
 
 public class RST_Layout extends JScrollPane {
     public JPanel rootpanel;
+    public AppUser appuser = App.getAppUser();
+    public Runnable onSubmit;
     public RST_Layout(AppDesign appdesign) {
         setOpaque(false);
         getViewport().setOpaque(false);
@@ -63,10 +66,14 @@ public class RST_Layout extends JScrollPane {
     }
 
     /**
-     * Returns true if the inserted data is valied and save to use. Only then continue.
-     * @return bool value
+     * Returns true if the inserted data is valid and save to use. Only then continue.
+     * @return Default return value is false, to prevent currupted data from being inserted into AppUser obj and later into the database
      */
     public boolean valid() {
         return false;
+    }
+
+    public void onSubmit(Runnable onSubmit) {
+        this.onSubmit = onSubmit;
     }
 }

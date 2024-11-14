@@ -14,8 +14,7 @@ import com.swingdating.Components.Button;
 import com.swingdating.Components.InputField;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.DBManagerSQLite;
-import com.swingdating.System.PasswordHash;
+import com.swingdating.System.AppUser;
 
 public class PageLogin extends JPanel {
     public static String pagename = "SWINGDATING - LOGIN";
@@ -32,8 +31,8 @@ public class PageLogin extends JPanel {
         setBackground(appdesign.Color_BackgroundMain);
         setLayout(new GridBagLayout());
 
-        inputfield_Username = new InputField(appdesign, false);
-        inputfield_Password = new InputField(appdesign, true);
+        inputfield_Username = new InputField(appdesign, false, "Enter your username");
+        inputfield_Password = new InputField(appdesign, true, "Enter your password");
         Button button = new Button("login / register", appdesign, new Dimension(appdesign.inputFieldWidth/5*4, appdesign.inputFieldHeight), () -> credentialCheck());
 
         InputLabel inpl_username = new InputLabel("username", appdesign);
@@ -64,22 +63,24 @@ public class PageLogin extends JPanel {
         rootpanel.add(new JLabel(" "));
         rootpanel.add(button);
         rootpanel.add(Box.createVerticalStrut(appdesign.inputFieldHeight/2));
-
         add(rootpanel);
     }
 
     private void credentialCheck() {
-        if (inputfield_Username.getValue().isEmpty() || inputfield_Password.getValue().isEmpty()) {return;}
-        DBManagerSQLite db = App.db;
-        String[][] data = db
-                .get("SELECT password_hash, password_salt FROM appusers WHERE username = '" + this.username + "'");
-        if (data.length <= 1) {
-            App.switchToPage("SWINGDATING - REGISTER");
+        if (inputfield_Username.getValue() == null || inputfield_Username.getValue().isEmpty() || inputfield_Password.getValue() == null || inputfield_Password.getValue().isEmpty()) {return;}
+        AppUser appuser = AppUser.getAppUserByUsername(username);
+
+        if (appuser == null) {
+            App.setAppUser(new AppUser(null, inputfield_Username.getValue(), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null));
+            App.switchToPage(PageRegister.pagename);
         } else {
-            if (PasswordHash.verifyPassword(new PasswordHash(password, data[1][1]), data[1][0])) {
-                App.switchToPage("SWINGDATING - HOME");
+            if (appuser.getCDHash().verifyPassword(inputfield_Password.getValue())) {
+                inputfield_Password.setInvalidValue(false);
+                inputfield_Password.setValue("");
+                App.setAppUser(appuser); // The appuser has to be set first and only then switch to the page, else, the page does not have accsess to the loaded appuser object
+                App.switchToPage(PageHome.pagename);
             } else {
-                System.out.println("WRONG PASSWORD");
+                inputfield_Password.setInvalidValue(true);
             }
         }
     }

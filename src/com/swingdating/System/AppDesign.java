@@ -21,6 +21,7 @@ public class AppDesign {
     public Color Color_AccentTertiary;
     public Color Color_BorderDark;
     public Color Color_BorderLight;
+    public Color Color_Transparent = new Color(0, 0, 0, 0);
 
     // SIZES
     public int titlebarHeight = 35;

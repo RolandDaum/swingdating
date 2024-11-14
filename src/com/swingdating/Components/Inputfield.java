@@ -22,14 +22,19 @@ public class InputField extends JPanel {
     private JTextField inputfield;
     private JPasswordField inputfieldPassword;
 
+    private boolean invalidValue = false;
+
     private AppDesign appdesign;
 
     // TODO: Add multiple constructors
     // TODO: Add input data types
     public InputField(AppDesign appdesign) {
-        this(appdesign, false);
+        this(appdesign, false, null);
     }
     public InputField(AppDesign appdesign, Boolean passwordfield) {
+        this(appdesign, passwordfield, null);
+    }
+    public InputField(AppDesign appdesign, Boolean passwordfield, String tooltip) {
         this.appdesign = appdesign;
    
         setLayout(null);
@@ -67,6 +72,7 @@ public class InputField extends JPanel {
             inputfieldPassword.setEchoChar(appdesign.PasswordFiledChar);
         }
         
+        inputfield.setToolTipText(tooltip);
         inputfield.setOpaque(false);
         // inputfield.setAlignmentX(Component.CENTER_ALIGNMENT);
         inputfield.setPreferredSize(new Dimension(appdesign.inputFieldWidth-2, appdesign.inputFieldHeight-2));
@@ -134,10 +140,9 @@ public class InputField extends JPanel {
         // super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(appdesign.Color_BorderLight); // This changes the bordre color
+        g2.setColor(invalidValue ? appdesign.Color_AccentSecondary : appdesign.Color_BorderLight); // This changes the bordre color
         g2.fillRoundRect(0, 0, appdesign.inputFieldWidth, appdesign.inputFieldHeight, appdesign.inputFieldHeight, appdesign.inputFieldHeight);
         g2.dispose();
-
     }
 
     // Methoden zum Setzen der Events
@@ -157,10 +162,21 @@ public class InputField extends JPanel {
     public String getValue() {
         return inputfield.getText();    
     }
+    public void setValue(String value) {
+        inputfield.setText(value);
+    }
     public void setFocus() {
         inputfield.requestFocus();
     }
     public void removeFocus() {
         KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();   
+    }
+    public void toggleInvalidValue() {
+        invalidValue = !invalidValue;
+        repaint();
+    }
+    public void setInvalidValue(boolean invalidValue) {
+        this.invalidValue = invalidValue;
+        repaint();
     }
 }

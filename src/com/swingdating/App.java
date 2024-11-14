@@ -33,10 +33,9 @@ public class App extends JFrame {
 
     // Layout setup
     private Titlebar titlebar;    
-    private static JPanel mainPanel;
-    private static CardLayout mainPanelCardLayout;
-    private List<JPanel> mainPanelPages = new ArrayList<>();
-    private JPanel rootpanel;
+    private JPanel mainPanel;
+    private CardLayout mainPanelCardLayout;
+    private static JPanel rootpanel;
 
     // Resizeable Frame stuff
     private int prevMX;
@@ -87,18 +86,11 @@ public class App extends JFrame {
         // Create Main Pages Stuff
         mainPanelCardLayout = new CardLayout();
         mainPanel = new JPanel(mainPanelCardLayout);
-        createPages(); // Muss nach der Layout- und Panel-Erstellung ausgeführt werden
-
-        // Add All Panel Pages to main CaryLayoutPanel
-        for (JPanel jPanelPage : mainPanelPages) {
-            mainPanel.add(jPanelPage, jPanelPage.getName());
-        }
-
-        // Load first Page from Panel list
-        mainPanelCardLayout.show(mainPanel, "SWINGDATING - LOGIN");
+        PageLogin pagelogin = new PageLogin(appdesign);
+        mainPanel.add(pagelogin, pagelogin.pagename);
 
         // Create Titlebar
-        titlebar = new Titlebar(this, appdesign, mainPanelPages.get(0).getName());
+        titlebar = new Titlebar(this, appdesign, pagelogin.getName());
 
         //  Add stuff together
         rootpanel.add(titlebar, BorderLayout.NORTH);
@@ -262,14 +254,24 @@ public class App extends JFrame {
         }
     }
     
-    private void createPages() {
-        mainPanelPages.add(new PageLogin(appdesign));
-        mainPanelPages.add(new PageRegister(appdesign));
-        mainPanelPages.add(new PageHome(appdesign));
-    }
+    /*
+     * Login will always be index 0 in the appinstance cardlayout and never even think about to remove it -> Dangerous
+     */
     public static void switchToPage(String pageName) {
-        mainPanelCardLayout.show(mainPanel, pageName);
-        setWindowsTitle(pageName);
+        // TODO: Maybe add autosave on exiting/switching page
+        App appinstance = App.getAppInstance();
+        try {   appinstance.mainPanel.remove(1);    } catch (Exception e) {}
+        if (pageName.equals(PageHome.pagename)) {
+            appinstance.mainPanel.add(new PageHome(appinstance.appdesign), PageHome.pagename);
+            appinstance.mainPanelCardLayout.show(appinstance.mainPanel, PageHome.pagename);
+        } else if (pageName.equals(PageRegister.pagename)) {
+            appinstance.mainPanel.add(new PageRegister(appinstance.appdesign), PageRegister.pagename);
+            appinstance.mainPanelCardLayout.show(appinstance.mainPanel, PageRegister.pagename);;
+        } else if (pageName.equals(PageLogin.pagename)) {
+            App.removeGlobalUser();
+            appinstance.mainPanelCardLayout.show(appinstance.mainPanel, PageLogin.pagename);;
+        }
+
         updateWindow();
     }
 
@@ -281,13 +283,19 @@ public class App extends JFrame {
     }
 
     public static App getAppInstance() {
-        return (App) SwingUtilities.getWindowAncestor(mainPanel);
+        return (App) SwingUtilities.getWindowAncestor(rootpanel);
     }
     
     public static AppUser getAppUser() {
-        return App.getAppInstance().appuser;
+        App appinstance = App.getAppInstance();
+
+        return (appinstance == null) ? null : appinstance.appuser;
     }
     public static void setAppUser(AppUser appuser) {
+        removeGlobalUser();
         App.getAppInstance().appuser = appuser;
+    }
+    public static void removeGlobalUser() {
+        App.getAppInstance().appuser = null;
     }
 }

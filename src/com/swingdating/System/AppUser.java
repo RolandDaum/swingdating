@@ -30,7 +30,7 @@ public class AppUser {
     // music_preference VARCHAR(45) NOT NULL
     private String UUID;
     private String username;
-    private PasswordHash passwordHash;
+    private CredentialHash CredentialHash;
 
     private String first_name;
     private String last_name;
@@ -40,12 +40,12 @@ public class AppUser {
     private String gender;
     private String sexuality;
 
-    private int postal_code;
+    private Integer postal_code;
     private String city;
     private String district;
 
-    private int height;
-    private int weight;
+    private Integer height;
+    private Integer weight;
     private String hair_color;
     private String eye_color;
 
@@ -53,21 +53,22 @@ public class AppUser {
     private String favorite_subject;
     private String music_preference;
 
-    private boolean UUIDexistsinDB = false;
+    private Boolean UUIDexistsinDB = false;
 
     public AppUser(
-        String UUID, String username, PasswordHash passwordHash, 
-        String first_name, String last_name, String birth_date, String nationality, String gender, String sexuality, 
-        int postal_code, String city, String district,
-        int height, int weight, String hair_color, String eye_color,
+        String UUID, String username, CredentialHash CredentialHash, 
+        String first_name, String last_name, String birth_date, String birth_place, String nationality, String gender, String sexuality, 
+        Integer postal_code, String city, String district,
+        Integer height, Integer weight, String hair_color, String eye_color,
         String religion, String favorite_subject, String music_preference
         ) {
         this.UUID = UUID;
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.CredentialHash = CredentialHash;
         this.first_name = first_name;
         this.last_name = last_name;
         this.birth_date = birth_date;
+        this.birth_place = birth_place;
         this.nationality = nationality;
         this.gender = gender;
         this.sexuality = sexuality;
@@ -92,14 +93,14 @@ public class AppUser {
         }
     
         AppUser appuser = new AppUser(
-            data[1][0], data[1][1], new PasswordHash(data[1][2], data[1][3], true), 
-            data[1][4], data[1][5], data[1][6], data[1][7], data[1][8], data[1][9], 
-            Integer.parseInt(data[1][10]), data[1][11], data[1][12], 
-            Integer.parseInt(data[1][13]), 
+            data[1][0], data[1][1], new CredentialHash(data[1][2], data[1][3], true), 
+            data[1][4], data[1][5], data[1][6], data[1][7], data[1][8], data[1][9], data[1][10], 
+            Integer.parseInt(data[1][11]), data[1][12], data[1][13], 
             Integer.parseInt(data[1][14]), 
-            data[1][15], data[1][16], 
-            data[1][17], data[1][18], 
-            data[1][19]);
+            Integer.parseInt(data[1][15]), 
+            data[1][16], data[1][17], 
+            data[1][18], data[1][19], 
+            data[1][20]);
 
         appuser.UUIDexistsinDB = true;
         
@@ -108,10 +109,6 @@ public class AppUser {
     
     public static AppUser createDefaultAppUser() {
         return null;
-    }
-
-    public int getAge() {
-        return 0;
     }
 
     public void savetoDB() {
@@ -126,7 +123,7 @@ public class AppUser {
                     "UPDATE appusers " + 
                     "SET username = '%s', password_hash = '%s', password_salt = '%s', first_name = '%s', last_name = '%s', birth_date = '%s', birth_place = '%s', nationality = '%s', gender = '%s', sexuality = '%s', postal_code = '%s', city = '%s', district = '%s', height = '%s', weight = '%s', hair_color = '%s', eye_color = '%s', religion = '%s', favorite_subject = '%s', music_preference = '%s' " + 
                     "WHERE UUID = '%s'",
-                    username, passwordHash.getPasswordHash(), passwordHash.getPasswordSalt(), first_name, last_name, birth_date, birth_place, nationality, gender, sexuality, postal_code, city, district, height, weight, hair_color, eye_color, religion, favorite_subject, music_preference, 
+                    username, CredentialHash.getCredentialHash(), CredentialHash.getPasswordSalt(), first_name, last_name, birth_date, birth_place, nationality, gender, sexuality, postal_code, city, district, height, weight, hair_color, eye_color, religion, favorite_subject, music_preference, 
                     UUID
                 )
             );
@@ -135,7 +132,7 @@ public class AppUser {
                 String.format(
                     "INSERT INTO appusers" +
                     "VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-                    UUID, username, passwordHash.getPasswordHash(), passwordHash.getPasswordSalt(), first_name, last_name, birth_date, birth_place, nationality, gender, sexuality, postal_code, city, district, height, weight, hair_color, eye_color, religion, favorite_subject, music_preference
+                    UUID, username, CredentialHash.getCredentialHash(), CredentialHash.getPasswordSalt(), first_name, last_name, birth_date, birth_place, nationality, gender, sexuality, postal_code, city, district, height, weight, hair_color, eye_color, religion, favorite_subject, music_preference
                 )
             );
         }
@@ -144,7 +141,7 @@ public class AppUser {
     public boolean validateData() {
         return UUID != null && !UUID.isEmpty() &&
                username != null && !username.isEmpty() &&
-               passwordHash != null &&
+               CredentialHash != null &&
                first_name != null && !first_name.isEmpty() &&
                last_name != null && !last_name.isEmpty() &&
                gender != null && !gender.isEmpty() &&
@@ -159,4 +156,55 @@ public class AppUser {
                religion != null && !religion.isEmpty() &&
                height > 0 && weight > 0;
     }
+
+    public int getAge() {
+        return 0;
+    }
+
+    // Get and Set Methods
+    public CredentialHash getCDHash() {
+        return this.CredentialHash;
+    }
+    public boolean setCDHash(CredentialHash pwHash) {
+        this.CredentialHash = pwHash;
+        return true;
+    }
+    public String getUsername() {
+        return this.username;
+    }
+    public boolean setUsername(String username) {
+        if (AppUser.getAppUserByUsername(username) == null && !username.isEmpty() && !username.trim().isEmpty()) {
+            this.username = username;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public String getFirstName() {
+        return this.first_name;
+    }
+    public String getLastName() {
+        return this.last_name;
+    }
+    public boolean setName(String first_name, String last_name) {
+        System.out.println(first_name);
+        System.out.println(last_name);
+        System.out.println(!first_name.equals(last_name));
+        System.out.println(!first_name.trim().isEmpty());
+        System.out.println(!last_name.trim().isEmpty());
+
+        if (!first_name.equals(last_name) && !first_name.trim().isEmpty() && !last_name.trim().isEmpty()) {
+            this.first_name = first_name;
+            this.last_name = last_name;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public String getBirthday() {
+        return this.birth_date;
+    }
+    
 }
+
+// TODO: class appuser data type can be added here -> check if they can be used outside in any way...
