@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.function.Consumer;
 
 public class InputField extends JPanel {
@@ -24,18 +26,28 @@ public class InputField extends JPanel {
 
     private boolean invalidValue = false;
 
+    private boolean numbersonly = false;
+    private int minNumber = 0;
+    private int maxNumber = 0;
+
     private AppDesign appdesign;
 
-    // TODO: Add multiple constructors
-    // TODO: Add input data types
     public InputField(AppDesign appdesign) {
-        this(appdesign, false, null);
+        this(appdesign, false, null, false);
     }
-    public InputField(AppDesign appdesign, Boolean passwordfield) {
-        this(appdesign, passwordfield, null);
+    public InputField(AppDesign appdesign, String tooltip) {
+        this(appdesign, false, tooltip, false);
+    }
+    public InputField(AppDesign appdesign, String tooltip, boolean numbersonly) {
+        this(appdesign, false, tooltip, numbersonly);
     }
     public InputField(AppDesign appdesign, Boolean passwordfield, String tooltip) {
+        this(appdesign, passwordfield, tooltip, false);
+    }
+    public InputField(AppDesign appdesign, Boolean passwordfield, String tooltip, boolean numbersonly) {
         this.appdesign = appdesign;
+        this.numbersonly = numbersonly;
+
    
         setLayout(null);
         setOpaque(false);
@@ -49,7 +61,7 @@ public class InputField extends JPanel {
                     Graphics2D g2 = (Graphics2D) g.create();
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     g2.setColor(appdesign.Color_BackgroundContainer);
-                    g2.fillRoundRect(0, 0, appdesign.inputFieldWidth-(appdesign.BorderThickness*2), appdesign.inputFieldHeight-(appdesign.BorderThickness*2), appdesign.inputFieldHeight-appdesign.BorderThickness, appdesign.inputFieldHeight-appdesign.BorderThickness);
+                    g2.fillRoundRect(0, 0, appdesign.inputFieldWidth-(appdesign.BorderThickness*2), appdesign.inputFieldHeight-(appdesign.BorderThickness*2), appdesign.BorderRadiusComponents-appdesign.BorderThickness, appdesign.BorderRadiusComponents-appdesign.BorderThickness);
                     g2.dispose();
                     super.paintComponent(g);
                 }
@@ -62,7 +74,7 @@ public class InputField extends JPanel {
                     Graphics2D g2 = (Graphics2D) g.create();
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     g2.setColor(appdesign.Color_BackgroundContainer);
-                    g2.fillRoundRect(0, 0, appdesign.inputFieldWidth-(appdesign.BorderThickness*2), appdesign.inputFieldHeight-(appdesign.BorderThickness*2), appdesign.inputFieldHeight-appdesign.BorderThickness, appdesign.inputFieldHeight-appdesign.BorderThickness);
+                    g2.fillRoundRect(0, 0, appdesign.inputFieldWidth-(appdesign.BorderThickness*2), appdesign.inputFieldHeight-(appdesign.BorderThickness*2), appdesign.BorderRadiusComponents-appdesign.BorderThickness, appdesign.BorderRadiusComponents-appdesign.BorderThickness);
                     g2.dispose();
                     super.paintComponent(g);
                 }};
@@ -82,10 +94,12 @@ public class InputField extends JPanel {
         inputfield.setCaretColor(appdesign.Color_FontPrimary);
         inputfield.setBounds(appdesign.BorderThickness, appdesign.BorderThickness, getWidth()-(appdesign.BorderThickness*2), getHeight()-(appdesign.BorderThickness*2));
 
+
         // on insert/remove/update Listener
-        inputfield.getDocument().addDocumentListener(new DocumentListener() {
+        inputfield.getDocument().addDocumentListener(new DocumentListener() {          
             @Override
             public void insertUpdate(DocumentEvent e) {
+                inputTypeChecker();
                 if (onType != null) {
                     onType.accept(inputfield.getText());
                 }
@@ -141,9 +155,25 @@ public class InputField extends JPanel {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(invalidValue ? appdesign.Color_AccentSecondary : appdesign.Color_BorderLight); // This changes the bordre color
-        g2.fillRoundRect(0, 0, appdesign.inputFieldWidth, appdesign.inputFieldHeight, appdesign.inputFieldHeight, appdesign.inputFieldHeight);
+        g2.fillRoundRect(0, 0, appdesign.inputFieldWidth, appdesign.inputFieldHeight, appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
         g2.dispose();
     }
+
+    private void inputTypeChecker() {
+        String value = inputfield.getText();
+        if (!this.numbersonly || value.isEmpty()) {return;}
+        try {
+            Integer.parseInt(value);
+        } catch (Exception error) {
+            // Must run after the "insertUpdate" event finished else there will be an error.
+            SwingUtilities.invokeLater(() -> {
+                inputfield.setText(value.substring(0, value.length()-1));
+                repaint();
+            });
+            return;
+        }
+    }
+    
 
     // Methoden zum Setzen der Events
     public void onType(Consumer<String> onType) { // Change method signature

@@ -20,18 +20,14 @@ public class RST_Username extends RST_Layout {
         });
 
         usernameInputField.setValue(appuser != null ? appuser.getUsername() : "");
-        rootpanel.add(new InputLabel("Username", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
-        rootpanel.add(usernameInputField);
-        rootpanel.add(errorLabel);
-        rootpanel.add(Box.createVerticalGlue());
-
-
-
+        rootAdd(new InputLabel("Username", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
+        rootAdd(usernameInputField);
+        rootAdd(errorLabel);
+        rootAdd(Box.createVerticalGlue());
     }
     @Override
     public boolean valid() {
         boolean valid = appuser.setUsername(usernameInputField.getValue());
-        System.out.println(usernameInputField.getValue());
         if (valid) {
             usernameInputField.setInvalidValue(false);
         } else {

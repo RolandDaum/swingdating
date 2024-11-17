@@ -1,8 +1,6 @@
 package com.swingdating;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -87,7 +85,7 @@ public class App extends JFrame {
         mainPanelCardLayout = new CardLayout();
         mainPanel = new JPanel(mainPanelCardLayout);
         PageLogin pagelogin = new PageLogin(appdesign);
-        mainPanel.add(pagelogin, pagelogin.pagename);
+        mainPanel.add(pagelogin, pagelogin.getName());
 
         // Create Titlebar
         titlebar = new Titlebar(this, appdesign, pagelogin.getName());
@@ -258,7 +256,6 @@ public class App extends JFrame {
      * Login will always be index 0 in the appinstance cardlayout and never even think about to remove it -> Dangerous
      */
     public static void switchToPage(String pageName) {
-        // TODO: Maybe add autosave on exiting/switching page
         App appinstance = App.getAppInstance();
         try {   appinstance.mainPanel.remove(1);    } catch (Exception e) {}
         if (pageName.equals(PageHome.pagename)) {
@@ -275,17 +272,21 @@ public class App extends JFrame {
         updateWindow();
     }
 
-    public static void setWindowsTitle(String title) {
+    public static String getWindowTitle() {
+        App appInstance = getAppInstance();
+        if (appInstance != null && appInstance.titlebar != null) {
+            return appInstance.titlebar.getTitle();
+        }
+        return "";
+    }
+    public static void setWindowTitle(String title) {
         App appInstance = getAppInstance();
         if (appInstance != null && appInstance.titlebar != null) {
             appInstance.titlebar.setTitle(title);
         }
+        updateWindow();
     }
 
-    public static App getAppInstance() {
-        return (App) SwingUtilities.getWindowAncestor(rootpanel);
-    }
-    
     public static AppUser getAppUser() {
         App appinstance = App.getAppInstance();
 
@@ -298,4 +299,13 @@ public class App extends JFrame {
     public static void removeGlobalUser() {
         App.getAppInstance().appuser = null;
     }
+
+    public static AppDesign getAppDesign() {
+        App appinstance = App.getAppInstance();
+        return appinstance.appdesign;
+    }
+    public static App getAppInstance() {
+        return (App) SwingUtilities.getWindowAncestor(rootpanel);
+    }
+    
 }

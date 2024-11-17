@@ -27,8 +27,8 @@ public class RST_Layout extends JScrollPane {
         
         rootpanel = new JPanel();
         rootpanel.setLayout(new BoxLayout(rootpanel, BoxLayout.Y_AXIS));
+
         rootpanel.setOpaque(false);
-        rootpanel.setMaximumSize(new Dimension(appdesign.inputFieldWidth, (int) rootpanel.getMaximumSize().getHeight()));
 
         setViewportView(rootpanel);
 
@@ -71,6 +71,10 @@ public class RST_Layout extends JScrollPane {
      */
     public boolean valid() {
         return false;
+    }
+    
+    public void rootAdd(Component comp) {
+        rootpanel.add(comp);
     }
 
     public void onSubmit(Runnable onSubmit) {

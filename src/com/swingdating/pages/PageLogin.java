@@ -31,7 +31,7 @@ public class PageLogin extends JPanel {
         setBackground(appdesign.Color_BackgroundMain);
         setLayout(new GridBagLayout());
 
-        inputfield_Username = new InputField(appdesign, false, "Enter your username");
+        inputfield_Username = new InputField(appdesign, "Enter your username");
         inputfield_Password = new InputField(appdesign, true, "Enter your password");
         Button button = new Button("login / register", appdesign, new Dimension(appdesign.inputFieldWidth/5*4, appdesign.inputFieldHeight), () -> credentialCheck());
 

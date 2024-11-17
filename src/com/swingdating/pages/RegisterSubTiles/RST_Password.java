@@ -17,8 +17,8 @@ public class RST_Password extends RST_Layout {
         super(appdesign);
         setName("password");
 
-        pwIF1 = new InputField(appdesign, true);
-        pwIF2 = new InputField(appdesign, true);
+        pwIF1 = new InputField(appdesign, true, "Enter password");
+        pwIF2 = new InputField(appdesign, true, "Enter password again");
         pwIF1.onSubmit((value) -> {
             pwIF2.setFocus();
         });
@@ -28,24 +28,37 @@ public class RST_Password extends RST_Layout {
             }
         });
 
-        rootpanel.add(new InputLabel("Password", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
-        rootpanel.add(pwIF1);
-        rootpanel.add(new InputLabel("Validation", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
-        rootpanel.add(pwIF2);
-        rootpanel.add(Box.createVerticalGlue());
+        rootAdd(new InputLabel("Password", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
+        rootAdd(pwIF1);
+        rootAdd(new InputLabel("Validation", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
+        rootAdd(pwIF2);
+        rootAdd(Box.createVerticalGlue());
 
     }
     @Override
     public boolean valid() {
         boolean valid = false;
-        if (pwIF1.getValue().equals(pwIF2.getValue()) && !pwIF1.getValue().trim().isEmpty()) {
+        boolean pwif1IsEmpty = pwIF1.getValue().trim().isEmpty();
+        boolean pwif2IsEmpty = pwIF2.getValue().trim().isEmpty();
+        boolean pwif1pwif2Same = pwIF1.getValue().equals(pwIF2.getValue());
+        if (!pwif1IsEmpty && pwif1pwif2Same) {
             valid = appuser.setCDHash(new CredentialHash(pwIF1.getValue()));
+
         }
-        if (valid) {
-            pwIF2.setInvalidValue(false);
-        } else {
+        if (!valid) {
+            pwIF1.setInvalidValue(true);
             pwIF2.setInvalidValue(true);
+            if (!pwif1IsEmpty && pwif2IsEmpty) {
+                pwIF1.setInvalidValue(false);
+            } 
+            if (pwif1IsEmpty && !pwif2IsEmpty) {
+                pwIF2.setInvalidValue(false);
+            }
+        } else {
+            pwIF1.setInvalidValue(false);
+            pwIF2.setInvalidValue(false);
         }
+        
         return valid;
     }
 }

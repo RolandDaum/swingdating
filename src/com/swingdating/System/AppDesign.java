@@ -31,6 +31,7 @@ public class AppDesign {
     public int BorderThickness = 1;
     public int BorderThicknessWindow = 2;
     public int BorderRadiusWindow = titlebarHeight+BorderThicknessWindow;
+    public int BorderRadiusComponents = inputFieldHeight/2;
     public int ScrollBarThickness = 6;
     
     // ASSETS

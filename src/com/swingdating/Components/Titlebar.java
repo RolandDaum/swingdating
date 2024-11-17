@@ -92,6 +92,9 @@ public class Titlebar extends JPanel {
         App.updateWindow();
     }
 
+    public String getTitle() {
+        return this.titleLabel.getText();
+    }
     public void setTitle(String title) {
         titleLabel.setText(title);
     }

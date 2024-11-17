@@ -5,6 +5,7 @@ import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 import com.swingdating.System.AppDesign;
 

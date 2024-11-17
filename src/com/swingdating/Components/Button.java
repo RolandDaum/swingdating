@@ -66,12 +66,12 @@ public class Button extends JButton {
     
         // Hintergrund zeichnen
         g2.setColor(backgroundColor);
-        g2.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
+        g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
     
         // Border zeichnen mit angepasster Dicke
         g2.setColor(appdesign.Color_BorderLight);
         g2.setStroke(new BasicStroke(appdesign.BorderThickness)); // Setze die Strichbreite für den Rahmen
-        g2.drawRoundRect(appdesign.BorderThickness/2, appdesign.BorderThickness/2, getWidth()- appdesign.BorderThickness, getHeight() - appdesign.BorderThickness, getHeight(), getHeight());
+        g2.drawRoundRect(appdesign.BorderThickness/2, appdesign.BorderThickness/2, getWidth()- appdesign.BorderThickness, getHeight() - appdesign.BorderThickness, appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
     
         super.paintComponent(g2);
         g2.dispose();

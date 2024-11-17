@@ -5,17 +5,20 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.security.DigestException;
 import java.util.Objects;
 import javax.accessibility.Accessible;
 import javax.swing.BorderFactory;
@@ -26,21 +29,29 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JWindow;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
+import com.swingdating.App;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.AppUserEnums.APU_Enum;
 
-public class DropDownMenu extends JComboBox<String> {
-    private AppDesign appdesign = new AppDesign(true);
-    public DropDownMenu(AppDesign appdesign, String[] items) {
-        super(items);
-
+public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
+    private AppDesign appdesign = App.getAppDesign();
+    private APU_Enum[] enumValues;
+    public DropDownMenu(AppDesign appdesign, APU_Enum[] enumValues) {
+        super(getEnumNames(enumValues));
+        this.enumValues = enumValues;
         UIManager.put("ComboBox.foreground", appdesign.Color_FontPrimary);
         UIManager.put("ComboBox.background", appdesign.Color_BackgroundContainer);
         UIManager.put("ComboBox.selectionForeground", appdesign.Color_FontPrimary);
@@ -54,37 +65,51 @@ public class DropDownMenu extends JComboBox<String> {
         UIManager.put("ComboBox.buttonHighlight",  appdesign.Color_FontPrimary);
         UIManager.put("ComboBox.buttonShadow",     appdesign.Color_FontPrimary);
 
-        UIManager.put("ComboBox.disabledForeground", appdesign.Color_FontPrimary); // Farbe für inaktiven Zustand
+        UIManager.put("ComboBox.disabledForeground", appdesign.Color_FontPrimary); // Color on inactive state
         UIManager.put("ComboBox.foreground", appdesign.Color_FontPrimary); 
 
         
-        // setUI(new BasicComboBoxUI());
-        setUI(new CustomComboBoxUI(new ImageIcon("src/com/swingdating/assets/Icon_DropdownmenuArrow.png"), appdesign));
+        setUI(new CustomeComboBoxButtonUI(new ImageIcon("src/com/swingdating/assets/Icon_DropdownmenuArrow.png"), appdesign));
         setForeground(appdesign.Color_FontPrimary);
         setBackground(appdesign.Color_BackgroundContainer);
         setBorder(new RoundedCornerBorder());
         addPopupMenuListener(new HeavyWeightContainerListener());
         configurePopup();
-        setPreferredSize(new Dimension(appdesign.inputFieldWidth, appdesign.inputFieldHeight));
-        setSize(new Dimension(appdesign.inputFieldWidth, appdesign.inputFieldHeight));
-        setMaximumSize(new Dimension(appdesign.inputFieldWidth, appdesign.inputFieldHeight));
+        setMaximumSize(new Dimension((int) getMaximumSize().getWidth(), appdesign.inputFieldHeight));
+        setAlignmentX(LEFT_ALIGNMENT);
+        setFont(new Font("Roboto Bold", Font.PLAIN, 16));
 
         setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                // c.setBackground(isSelected ? appdesign.Color_BackgroundOnContainer : appdesign.Color_BackgroundContainer);
                 c.setForeground(isSelected ? appdesign.Color_FontSecondary : appdesign.Color_FontPrimary);
                 c.setBackground(appdesign.Color_BackgroundContainer);
-                // c.setForeground(appdesign.Color_FontPrimary);
+                if (c instanceof JComponent) {
+                    JComponent jc = (JComponent) c;
+                    jc.setFont(new Font("Roboto Medium", Font.PLAIN, 14));
+                    jc.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                }
                 return c;
             }
         });
 
-        addPopupMenuListener(new ToggleRotationListener());
+        addPopupMenuListener(new CustomPopupMenuListener());
 
     }
+    
+    public APU_Enum getSelectedEnum() {
+        return (APU_Enum) enumValues[getSelectedIndex()];    
+    }
 
+    private static <T extends APU_Enum> String[] getEnumNames(T[] enumValues) {
+        String[] names = new String[enumValues.length];
+        for (int i = 0; i < enumValues.length; i++) {
+            names[i] = enumValues[i].getName();
+        }
+        return names;
+    }
+    
     private void configurePopup() {
         Object o = getAccessibleContext().getAccessibleChild(0);
         if (o instanceof JComponent) {
@@ -110,7 +135,7 @@ public class DropDownMenu extends JComboBox<String> {
                 }
             });
         }
-    
+        // TODO: Change Scrollbar appearance
         @Override
         public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
     
@@ -119,29 +144,29 @@ public class DropDownMenu extends JComboBox<String> {
     }
     
     private static class RoundedCornerBorder extends AbstractBorder {
-    
+        AppDesign appdesign = App.getAppDesign();
         @Override
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            int r = 16;
+            int r = appdesign.BorderRadiusComponents;
             int w = width - 1;
             int h = height - 1;
     
             Area round = new Area(new RoundRectangle2D.Float(x, y, w, h, r, r));
             if (c instanceof JPopupMenu) {
-                g2.setPaint(c.getBackground());
+                g2.setPaint(c.getBackground()); // Background of the dropdown list
                 g2.fill(round);
             } else {
                 Container parent = c.getParent();
                 if (Objects.nonNull(parent)) {
-                    g2.setPaint(new AppDesign(true).Color_BackgroundMain);
+                    g2.setPaint(appdesign.Color_BackgroundMain); // Color of the "corners" from the main combobox
                     Area corner = new Area(new Rectangle2D.Float(x, y, width, height));
                     corner.subtract(round);
                     g2.fill(corner);
                 }
             }
-            g2.setPaint(new AppDesign(true).Color_BorderLight);
+            g2.setPaint(appdesign.Color_BorderLight);
             g2.draw(round);
             g2.dispose();
         }
@@ -158,33 +183,43 @@ public class DropDownMenu extends JComboBox<String> {
         }
     }
    
-    private class ToggleRotationListener implements PopupMenuListener {
+    private class CustomPopupMenuListener implements PopupMenuListener {
         @Override
         public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-            CustomComboBoxUI ui = (CustomComboBoxUI) getUI();
+            CustomeComboBoxButtonUI ui = (CustomeComboBoxButtonUI) getUI();
             ui.rotateIcon(true);
+            customizeComboBoxScrollBar((JComboBox<?>) e.getSource());
         }
-
         @Override
         public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-            CustomComboBoxUI ui = (CustomComboBoxUI) getUI();
+            CustomeComboBoxButtonUI ui = (CustomeComboBoxButtonUI) getUI();
             ui.rotateIcon(false);
         }
-
         @Override
         public void popupMenuCanceled(PopupMenuEvent e) {}
     }
-   
+    private void customizeComboBoxScrollBar(JComboBox<?> comboBox) {
+        SwingUtilities.invokeLater(() -> {
+            BasicComboPopup popup = (BasicComboPopup) comboBox.getAccessibleContext().getAccessibleChild(0);
+            JScrollPane scrollPane = (JScrollPane) popup.getComponent(0);
+
+            JScrollBar customScrollBar = new JScrollBar(JScrollBar.VERTICAL);
+            customScrollBar.setPreferredSize(new Dimension(8, customScrollBar.getHeight()));
+            // customScrollBar.setBackground(Color.LIGHT_GRAY);
+            customScrollBar.setUI(new CustomScrollBarUI()); 
+
+            scrollPane.setVerticalScrollBar(customScrollBar);
+        });
+    }
 }
 
-
-class CustomComboBoxUI extends BasicComboBoxUI {
+class CustomeComboBoxButtonUI extends BasicComboBoxUI {
     private final ImageIcon icon;
     private JButton arrowButton;
     private boolean isRotated = false;
     private AppDesign appdesign;
 
-    public CustomComboBoxUI(ImageIcon icon, AppDesign appdesign) {
+    public CustomeComboBoxButtonUI(ImageIcon icon, AppDesign appdesign) {
         this.icon = scaleIcon(icon, 14, 11); // Skaliert das Icon auf eine Größe von 24x24 Pixel
         this.appdesign = appdesign;
     }
@@ -192,10 +227,10 @@ class CustomComboBoxUI extends BasicComboBoxUI {
     @Override
     protected JButton createArrowButton() {
         arrowButton = new JButton(icon);
-        arrowButton.setBorder(BorderFactory.createEmptyBorder());
         arrowButton.setContentAreaFilled(false);
         arrowButton.setFocusPainted(false);
-        
+        arrowButton.setBorder(null);
+
         return arrowButton;
     }
 
@@ -222,5 +257,70 @@ class CustomComboBoxUI extends BasicComboBoxUI {
         g2d.dispose();
 
         return new ImageIcon(rotatedImage);
+    }
+}
+
+class CustomScrollBarUI extends BasicScrollBarUI {
+    AppDesign appdesign = App.getAppDesign();
+    private boolean isThumbHovered = false;
+    @Override
+    protected void configureScrollBarColors() {
+        this.thumbColor = appdesign.Color_BackgroundOnContainer;
+        this.trackColor = appdesign.Color_BackgroundContainer;
+    }
+
+    @Override
+    protected JButton createDecreaseButton(int orientation) {
+        return createZeroButton();
+    }
+
+    @Override
+    protected JButton createIncreaseButton(int orientation) {
+        return createZeroButton();
+    }
+
+    private JButton createZeroButton() {
+        JButton button = new JButton();
+        button.setPreferredSize(new Dimension(0, 0));
+        button.setMinimumSize(new Dimension(0, 0));
+        button.setMaximumSize(new Dimension(0, 0));
+        return button;
+    }
+
+    @Override
+    protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2.setColor(isThumbHovered ? appdesign.Color_FontPrimary : appdesign.Color_BackgroundOnContainer);
+
+        int arc = thumbBounds.width;
+        g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, arc, arc);
+
+        g2.dispose();
+    }
+
+    @Override
+    protected void installListeners() {
+        super.installListeners();
+        scrollbar.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                if (getThumbBounds().contains(e.getPoint())) {
+                    isThumbHovered = true;
+                } else {
+                    isThumbHovered = false;
+                }
+                scrollbar.repaint();
+            }
+        });
+
+        scrollbar.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                isThumbHovered = false;
+                scrollbar.repaint();
+            }
+        });
     }
 }

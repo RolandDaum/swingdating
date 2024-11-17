@@ -17,7 +17,6 @@ public class RST_Name extends RST_Layout {
         
         firstNameIF = new InputField(appdesign);
         lastNameIF = new InputField(appdesign);
-        firstNameIF.onType((value) -> System.out.println(firstNameIF.getValue()));
         firstNameIF.onSubmit((value) -> lastNameIF.setFocus());
         lastNameIF.onSubmit((value) -> {
             if (onSubmit != null) {
@@ -25,25 +24,31 @@ public class RST_Name extends RST_Layout {
             }
         });
 
-        rootpanel.add(new InputLabel("Fist name", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
-        rootpanel.add(firstNameIF);
-        rootpanel.add(new InputLabel("Last name", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
-        rootpanel.add(lastNameIF);
-        rootpanel.add(Box.createVerticalGlue());
+        rootAdd(new InputLabel("Fist name", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
+        rootAdd(firstNameIF);
+        rootAdd(new InputLabel("Last name", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
+        rootAdd(lastNameIF);
+        rootAdd(Box.createVerticalGlue());
 
     }
     @Override
     public boolean valid() {
-        System.out.println(firstNameIF == null);
-        // firstNameIF.setValue("Roland");
-        System.out.println(firstNameIF.getValue());
-        System.out.println(lastNameIF.getValue());
         boolean valid = appuser.setName(firstNameIF.getValue(), lastNameIF.getValue());
+        boolean fNameIsEmpty = firstNameIF.getValue().isEmpty();
+        boolean lNameIsEmpty = lastNameIF.getValue().isEmpty();
 
-        if (valid) {
-            lastNameIF.setInvalidValue(false);
-        } else {
+        if (!valid) {
+            firstNameIF.setInvalidValue(true);
             lastNameIF.setInvalidValue(true);
+            if (!fNameIsEmpty && lNameIsEmpty) {
+                firstNameIF.setInvalidValue(false);
+            }
+            if (fNameIsEmpty && !lNameIsEmpty) {
+                lastNameIF.setInvalidValue(false);
+            }
+        } else {
+            firstNameIF.setInvalidValue(false);
+            lastNameIF.setInvalidValue(false);
         }
 
         return valid;
