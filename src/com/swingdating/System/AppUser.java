@@ -1,6 +1,7 @@
 package com.swingdating.System;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 import com.swingdating.App;
 import com.swingdating.System.AppUserEnums.APU_EyeColor;
@@ -279,6 +280,9 @@ public class AppUser {
             return true;
         }
         return false;
+    }
+    public int getAge() {
+        return Period.between(this.birth_date, LocalDate.now()).getYears();
     }
 
     public APU_EyeColor getEyeColor() {

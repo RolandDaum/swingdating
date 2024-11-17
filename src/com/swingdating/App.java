@@ -221,8 +221,8 @@ public class App extends JFrame {
 
         // setOpacity(0.5f);
         setVisible(true);
+        // switchToPage(PageHome.pagename);
     }
-
 
     private void setDefaultWindowShape() {
         setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), appdesign.BorderRadiusWindow, appdesign.BorderRadiusWindow));

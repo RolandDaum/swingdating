@@ -11,7 +11,7 @@ import javax.swing.JButton;
 public class Button extends JButton {
 
     private AppDesign appdesign;
-    private Color backgroundColor; // Neue Variable für den Hintergrund
+    private boolean isHoverd = false;
 
     public Button(String title, AppDesign appdesign, Runnable onclick) {
         this(title, appdesign, new Dimension((appdesign.inputFieldWidth/2),appdesign.inputFieldHeight), onclick);
@@ -19,7 +19,6 @@ public class Button extends JButton {
     public Button(String title, AppDesign appdesign, Dimension Dimension, Runnable onclick) {
         super(title);
         this.appdesign = appdesign;
-        this.backgroundColor = appdesign.Color_BackgroundContainer;
 
         setMinimumSize(Dimension);
         setMaximumSize(Dimension);
@@ -30,7 +29,6 @@ public class Button extends JButton {
         setFocusPainted(false);
         setOpaque(false);
         setBorderPainted(false);
-        // setBackground(appdesign.Color_AccentSecondary);
         setForeground(appdesign.Color_FontPrimary);
         setFont(new Font("Roboto Medium", Font.PLAIN, 14));
 
@@ -38,14 +36,14 @@ public class Button extends JButton {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                backgroundColor = appdesign.Color_BackgroundOnContainer;
+                isHoverd = true;
                 App.getAppInstance().setCursor(Cursor.HAND_CURSOR);
                 repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                backgroundColor = appdesign.Color_BackgroundContainer;
+                isHoverd = false;
                 App.getAppInstance().setCursor(Cursor.DEFAULT_CURSOR);
                 repaint();
             }
@@ -54,7 +52,10 @@ public class Button extends JButton {
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                onclick.run();
+                if (onclick != null) {
+                    onclick.run();
+                }
+
             }
         });
     }
@@ -65,14 +66,15 @@ public class Button extends JButton {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     
         // Hintergrund zeichnen
-        g2.setColor(backgroundColor);
+        g2.setColor(isHoverd ? appdesign.Color_BackgroundOnContainer : appdesign.Color_BackgroundContainer);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
     
         // Border zeichnen mit angepasster Dicke
         g2.setColor(appdesign.Color_BorderLight);
         g2.setStroke(new BasicStroke(appdesign.BorderThickness)); // Setze die Strichbreite für den Rahmen
         g2.drawRoundRect(appdesign.BorderThickness/2, appdesign.BorderThickness/2, getWidth()- appdesign.BorderThickness, getHeight() - appdesign.BorderThickness, appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
-    
+        setForeground(isHoverd ? appdesign.Color_FontSecondary : appdesign.Color_FontPrimary);
+
         super.paintComponent(g2);
         g2.dispose();
     }

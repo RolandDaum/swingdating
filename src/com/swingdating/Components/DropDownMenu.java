@@ -18,7 +18,6 @@ import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.security.DigestException;
 import java.util.Objects;
 import javax.accessibility.Accessible;
 import javax.swing.BorderFactory;
@@ -35,13 +34,10 @@ import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.plaf.basic.BasicScrollBarUI;
-
 import com.swingdating.App;
 import com.swingdating.System.AppDesign;
 import com.swingdating.System.AppUserEnums.APU_Enum;
@@ -135,7 +131,6 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
                 }
             });
         }
-        // TODO: Change Scrollbar appearance
         @Override
         public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
     
@@ -206,7 +201,7 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
             JScrollBar customScrollBar = new JScrollBar(JScrollBar.VERTICAL);
             customScrollBar.setPreferredSize(new Dimension(8, customScrollBar.getHeight()));
             // customScrollBar.setBackground(Color.LIGHT_GRAY);
-            customScrollBar.setUI(new CustomScrollBarUI()); 
+            customScrollBar.setUI(new ScrollBarUI(true)); 
 
             scrollPane.setVerticalScrollBar(customScrollBar);
         });
@@ -257,70 +252,5 @@ class CustomeComboBoxButtonUI extends BasicComboBoxUI {
         g2d.dispose();
 
         return new ImageIcon(rotatedImage);
-    }
-}
-
-class CustomScrollBarUI extends BasicScrollBarUI {
-    AppDesign appdesign = App.getAppDesign();
-    private boolean isThumbHovered = false;
-    @Override
-    protected void configureScrollBarColors() {
-        this.thumbColor = appdesign.Color_BackgroundOnContainer;
-        this.trackColor = appdesign.Color_BackgroundContainer;
-    }
-
-    @Override
-    protected JButton createDecreaseButton(int orientation) {
-        return createZeroButton();
-    }
-
-    @Override
-    protected JButton createIncreaseButton(int orientation) {
-        return createZeroButton();
-    }
-
-    private JButton createZeroButton() {
-        JButton button = new JButton();
-        button.setPreferredSize(new Dimension(0, 0));
-        button.setMinimumSize(new Dimension(0, 0));
-        button.setMaximumSize(new Dimension(0, 0));
-        return button;
-    }
-
-    @Override
-    protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g2.setColor(isThumbHovered ? appdesign.Color_FontPrimary : appdesign.Color_BackgroundOnContainer);
-
-        int arc = thumbBounds.width;
-        g2.fillRoundRect(thumbBounds.x, thumbBounds.y, thumbBounds.width, thumbBounds.height, arc, arc);
-
-        g2.dispose();
-    }
-
-    @Override
-    protected void installListeners() {
-        super.installListeners();
-        scrollbar.addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                if (getThumbBounds().contains(e.getPoint())) {
-                    isThumbHovered = true;
-                } else {
-                    isThumbHovered = false;
-                }
-                scrollbar.repaint();
-            }
-        });
-
-        scrollbar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                isThumbHovered = false;
-                scrollbar.repaint();
-            }
-        });
     }
 }
