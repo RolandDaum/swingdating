@@ -55,11 +55,9 @@ public class App extends JFrame {
         setTitle("SwingDating");
         setBackground(appdesign.Color_BackgroundMain);
 
-        // Load AppIcon
         try {
             setIconImage(ImageIO.read(new File("src/com/swingdating/assets/icon.png")));
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

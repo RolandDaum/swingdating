@@ -16,7 +16,7 @@ public class InputLabel extends JLabel {
     public InputLabel(String label, AppDesign appdesign, Insets margin) {
         super(label);
         setFont(new Font("Roboto Bold", Font.PLAIN, 16));
-        setForeground(appdesign.Color_FontPrimary);
+        setForeground(appdesign.Color_FontSecondary);
         setBorder(BorderFactory.createEmptyBorder(margin.top, margin.left, margin.bottom, margin.right));
     }
 

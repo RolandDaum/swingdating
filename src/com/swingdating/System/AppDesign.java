@@ -85,8 +85,8 @@ public class AppDesign {
             this.Color_BackgroundMain = new Color(8,8,8);
             this.Color_BackgroundContainer = new Color(21,21,21);
             this.Color_BackgroundOnContainer = new Color(32,32,32);
-            this.Color_FontPrimary =  new Color(177,177,176);
-            this.Color_FontSecondary =  new Color(255,255,255);
+            this.Color_FontSecondary =  new Color(177,177,176);
+            this.Color_FontPrimary =  new Color(255,255,255);
             this.Color_AccentPrimary =  new Color(242,235,210);
             this.Color_AccentSecondary =  new Color(249,4,6);
             this.Color_AccentTertiary =  new Color(246,182,83);

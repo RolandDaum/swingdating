@@ -95,6 +95,33 @@ public class AppUser {
         this.favorite_subject = favorite_subject;
         this.music_preference = music_preference;
     }
+    public static AppUser getAppUserByUUID(String UUID) {
+        DBManagerSQLite db = App.db;
+
+        String[][] data = db.get("SELECT * FROM appusers WHERE UUID = '" + UUID + "'");
+        if (data.length <= 1) {
+            return null;
+        }
+
+        AppUser appuser = new AppUser(
+            data[1][0], data[1][1], new CredentialHash(data[1][2], data[1][3], true), 
+            data[1][4], data[1][5], LocalDate.parse(data[1][6]), data[1][7], 
+            APU_Nationality.fromCode(data[1][8]),  // Use fromCode() for enum
+            APU_Gender.fromCode(data[1][9]),      // Use fromCode() for enum
+            APU_Sexuality.fromCode(data[1][10]), // sexuality remains a String
+            Integer.parseInt(data[1][11]), data[1][12], data[1][13], 
+            Integer.parseInt(data[1][14]), Integer.parseInt(data[1][15]), 
+            APU_HairColor.fromCode(data[1][16]),  // Use fromCode() for enum
+            APU_EyeColor.fromCode(data[1][17]),   // Use fromCode() for enum
+            APU_Religion.fromCode(data[1][18]),   // Use fromCode() for enum
+            APU_FavoriteSubject.fromCode(data[1][19]), // Use fromCode() for enum
+            APU_MusicPreference.fromCode(data[1][20]) // Use fromCode() for enum
+        );
+
+        appuser.UUIDexistsinDB = true;
+
+        return appuser;
+    }
     public static AppUser getAppUserByUsername(String username) {
         DBManagerSQLite db = App.db;
 

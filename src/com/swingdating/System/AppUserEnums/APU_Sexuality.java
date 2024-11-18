@@ -2,9 +2,9 @@ package com.swingdating.System.AppUserEnums;
 
 
 public enum APU_Sexuality implements APU_Enum  {
-    NORMAL("Straight", "hetrosexual"),
-    BOTH("Bisexual", "bisexual"),
-    SAME("Gay", "homosexual");
+    NORMAL("Straight", "hetrosexual"), // The opposit
+    BOTH("Bisexual", "bisexual"), // Both
+    SAME("Gay", "homosexual"); // The same
 
     private final String name;
     private final String code;

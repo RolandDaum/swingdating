@@ -3,6 +3,7 @@ package com.swingdating.Components;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -10,18 +11,21 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.ActionListener;
-
+import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ItemEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
-
 import com.swingdating.System.AppDesign;
 
 public class CheckBoxFHP extends JPanel {
     private JCheckBox checkBox;
     private String label;
     private AppDesign appdesign;
+    public Runnable onChange;
 
     public CheckBoxFHP(AppDesign appdesign, String label, Insets paddingInsets) {
         this.appdesign = appdesign;
@@ -31,9 +35,9 @@ public class CheckBoxFHP extends JPanel {
         setBackground(appdesign.Color_BackgroundMain);
         setBorder(BorderFactory.createEmptyBorder(5,10,5,10));
         setOpaque(false);
-        setMaximumSize(new Dimension(175, 100));
+        setMaximumSize(new Dimension(175, 50));
 
-        checkBox = new JCheckBox(label);
+        checkBox = new JCheckBox("    " + label);
         checkBox.setBackground(appdesign.Color_BackgroundContainer);
         checkBox.setForeground(appdesign.Color_FontPrimary);
         checkBox.setFont(new Font("Roboto Bold", Font.PLAIN, 16)); 
@@ -42,8 +46,30 @@ public class CheckBoxFHP extends JPanel {
         checkBox.setBorder(BorderFactory.createEmptyBorder(paddingInsets.top, paddingInsets.left, paddingInsets.bottom, paddingInsets.right));
         checkBox.setIcon(new RoundedCheckBoxIcon(appdesign, false)); // Setze das ungeprüfte Icon
         checkBox.setSelectedIcon(new RoundedCheckBoxIcon(appdesign, true)); 
+
+        checkBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (onChange != null) {
+                    onChange.run();
+                }
+            }
+        });
+            
+
+        checkBox.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+
         add(checkBox, BorderLayout.CENTER);
-        
     }
     @Override
     protected void paintComponent(Graphics g) {
@@ -80,6 +106,9 @@ public class CheckBoxFHP extends JPanel {
         this.label = label;
         checkBox.setText(label); // Update das Label der Checkbox
     }
+    public void setOnChange(Runnable onChange) {
+        this.onChange = onChange;
+    }
 }
 
 class RoundedCheckBoxIcon implements Icon {
@@ -95,15 +124,15 @@ class RoundedCheckBoxIcon implements Icon {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.setColor(appdesign.Color_BackgroundOnContainer);
+        g2d.setColor(appdesign.Color_BackgroundContainer);
         g2d.fillRoundRect(x, y, size, size, appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
 
-        g2d.setColor(selected ? appdesign.Color_AccentPrimary : appdesign.Color_BorderLight);
+        g2d.setColor(selected ? appdesign.Color_FontPrimary : appdesign.Color_FontSecondary);
         g2d.setStroke(selected ? new BasicStroke(0) : new BasicStroke(2));
         g2d.drawRoundRect(x, y, size, size, appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
 
         if (selected) {
-            g2d.setColor(appdesign.Color_AccentPrimary); // Die Farbe, wenn sie ausgewählt ist
+            g2d.setColor(appdesign.Color_FontPrimary);
             g2d.fillRoundRect(x , y , size, size, appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
         }
     }

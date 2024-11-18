@@ -13,9 +13,7 @@ public class RST_Address extends RST_Layout {
     public RST_Address(AppDesign appdesign) {
         super(appdesign);
         setName("address");
-    
-        rootAdd(new InputLabel("Address", appdesign, new Insets(0, appdesign.inputFieldHeight / 2, appdesign.inputFieldHeight / 4, 0)));
-        
+          
         rootAdd(new InputLabel("Postal Code", appdesign, new Insets(0, appdesign.inputFieldHeight / 2, appdesign.inputFieldHeight / 4, 0)));
         postalCodeField = new InputField(appdesign, "5 Digit ZIP Code", true);
         rootAdd(postalCodeField);

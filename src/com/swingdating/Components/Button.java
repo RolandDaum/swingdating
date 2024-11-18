@@ -37,14 +37,14 @@ public class Button extends JButton {
             @Override
             public void mouseEntered(MouseEvent e) {
                 isHoverd = true;
-                App.getAppInstance().setCursor(Cursor.HAND_CURSOR);
+                setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 isHoverd = false;
-                App.getAppInstance().setCursor(Cursor.DEFAULT_CURSOR);
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 repaint();
             }
         });

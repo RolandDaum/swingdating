@@ -10,10 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
@@ -79,7 +76,7 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                c.setForeground(isSelected ? appdesign.Color_FontSecondary : appdesign.Color_FontPrimary);
+                c.setForeground(isSelected ? appdesign.Color_FontPrimary : appdesign.Color_FontSecondary);
                 c.setBackground(appdesign.Color_BackgroundContainer);
                 if (c instanceof JComponent) {
                     JComponent jc = (JComponent) c;

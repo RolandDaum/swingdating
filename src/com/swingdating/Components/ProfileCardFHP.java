@@ -2,11 +2,13 @@ package com.swingdating.Components;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.BorderFactory;
@@ -17,8 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.Border;
-
 import com.swingdating.App;
 import com.swingdating.System.AppDesign;
 import com.swingdating.System.AppUser;
@@ -38,11 +38,11 @@ public class ProfileCardFHP extends JPanel {
 
         JLabel titleLabel = new JLabel(appuser.getFirstName() + " " + appuser.getLastName());
         titleLabel.setFont(new Font("Roboto Black", Font.BOLD, 18));
-        titleLabel.setForeground(appdesign.Color_FontSecondary);
+        titleLabel.setForeground(appdesign.Color_FontPrimary);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
 
         JLabel descriptionLabel = new JLabel(appuser.getAge() + " y   |   " + appuser.getGender().getName() + "   |   " + appuser.getCity());
-        descriptionLabel.setForeground(appdesign.Color_FontPrimary);
+        descriptionLabel.setForeground(appdesign.Color_FontSecondary);
         descriptionLabel.setFont(new Font("Roboto Medium Italic", Font.PLAIN, 14));
         descriptionLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -98,13 +98,7 @@ public class ProfileCardFHP extends JPanel {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS)); // Vertikale Anordnung
         contentPanel.setOpaque(false);
-
-        for (int i = 0; i < 20; i++) {
-            JLabel label = new JLabel("Text item " + (i + 1));
-            label.setForeground(appdesign.Color_FontPrimary);
-            label.setAlignmentX(Component.CENTER_ALIGNMENT);
-            contentPanel.add(label);
-        }
+        addProfDetailCards(contentPanel, appuser);
 
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.getViewport().setOpaque(false);
@@ -120,5 +114,53 @@ public class ProfileCardFHP extends JPanel {
 
         dialog.add(rootpanel);
         dialog.setVisible(true);
+    }
+    private static Component createProfDetailCard(String description, String content) {
+        AppDesign appdesign = App.getAppDesign();
+        JPanel panel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+                g2.setColor(appdesign.Color_BackgroundContainer);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
+            
+                g2.setColor(appdesign.Color_BorderLight);
+                g2.setStroke(new BasicStroke(appdesign.BorderThickness));
+                g2.drawRoundRect(appdesign.BorderThickness/2, appdesign.BorderThickness/2, getWidth()- appdesign.BorderThickness, getHeight() - appdesign.BorderThickness, appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
+            
+                super.paintComponent(g2);
+                g2.dispose();
+            }
+        };
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setOpaque(false);
+        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.setBorder(BorderFactory.createEmptyBorder(10,20,10,20));
+        panel.setBackground(appdesign.Color_BackgroundContainer);
+        JLabel descriptionLabel = new JLabel(description);
+        JLabel contentLabel = new JLabel(content);
+        descriptionLabel.setFont(new Font("Roboto Medium", Font.PLAIN, 12));
+        descriptionLabel.setForeground(appdesign.Color_FontSecondary);
+        contentLabel.setFont(new Font("Roboto Bold", Font.PLAIN, 16));
+        contentLabel.setForeground(appdesign.Color_FontPrimary);
+
+        panel.add(descriptionLabel);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(contentLabel);
+
+
+        return panel;
+    }
+    private static void addProfDetailCards(JPanel panel, AppUser appuser) {
+        panel.add(createProfDetailCard("Name:" , appuser.getFirstName() + " " + appuser.getLastName()));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Gender:" , appuser.getGender().getName()));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Sexuality:" , appuser.getSexuality().getName()));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Location:" , appuser.getPostalCode() + " " + appuser.getCity()));
+        // TODO: Add more information about the user
     }
 }

@@ -19,8 +19,6 @@ public class RST_Birthdate extends RST_Layout {
         super(appdesign);
         setName("birthdate");
     
-        rootAdd(new InputLabel("Birth Date", appdesign, new Insets(0, appdesign.inputFieldHeight / 2, appdesign.inputFieldHeight / 4, 0)));
-
         rootAdd(new InputLabel("Day", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight / 2, appdesign.inputFieldHeight / 4, 0)));
         dropdownmenuDay = new DropDownMenu<>(appdesign, APU_BirthdateDay.values());
         rootAdd(dropdownmenuDay);

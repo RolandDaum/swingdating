@@ -11,7 +11,7 @@ public class DBRebuild {
         // db.update("UPDATE appusers SET nationality = 'RUS' WHERE nationality = 'russisch'");
         // db.update("UPDATE appusers SET nationality = 'CAF' WHERE nationality = 'tuerkisch'");
         // db.update("UPDATE appusers SET nationality = 'TUR' WHERE nationality = 'afrikanisch'");
-        // db.update("UPDATE appusers SET sexuality = 'heterosexual' WHERE sexuality = 'heterosexuell'");
+        db.update("UPDATE appusers SET sexuality = 'hetrosexual' WHERE sexuality = 'heterosexual'");
         // db.update("UPDATE appusers SET sexuality = 'bisexual' WHERE sexuality = 'bisexuell'");
         // db.update("UPDATE appusers SET sexuality = 'homosexual' WHERE sexuality = 'homosexuell'");
         // db.update("UPDATE appusers SET religion = 'EV' WHERE religion = 'evangelisch'");

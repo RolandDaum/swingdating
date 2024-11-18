@@ -28,7 +28,7 @@ public class Titlebar extends JPanel {
         // Title
         titleLabel = new JLabel("", SwingConstants.LEFT);
         titleLabel.setFont(appdesign.fonts.get("Orbitron Medium").deriveFont(16f));
-        titleLabel.setForeground(appdesign.Color_AccentPrimary);
+        titleLabel.setForeground(appdesign.Color_FontSecondary);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, appdesign.titlebarHeight/2, 0, 0)); // Linker Abstand von 10 Pixeln
 
         // Button Panel
@@ -47,6 +47,13 @@ public class Titlebar extends JPanel {
 
         // Drag functionality
         addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+
+            };
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            };
             public void mousePressed(java.awt.event.MouseEvent e) {
                 mouseX = e.getX();
                 mouseY = e.getY();
