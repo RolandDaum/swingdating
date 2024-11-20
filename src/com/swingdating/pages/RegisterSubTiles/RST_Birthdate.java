@@ -30,8 +30,14 @@ public class RST_Birthdate extends RST_Layout {
         rootAdd(new InputLabel("Year", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight / 2, appdesign.inputFieldHeight / 4, 0)));
         dropdownmenuYear = new DropDownMenu<>(appdesign, APU_BirthdateYear.values());
         rootAdd(dropdownmenuYear);
+        loadUserDate();
     }
-
+    private void loadUserDate() {
+        if (!appuser.validateData()) {return;}
+        dropdownmenuDay.setSelectedItem(APU_BirthdateDay.fromCode(appuser.getBirthDate().getDayOfMonth()).getName());
+        dropdownmenuMonth.setSelectedItem(APU_BrithdateMonth.fromCode(appuser.getBirthDate().getMonthValue()).getName());
+        dropdownmenuYear.setSelectedItem(APU_BirthdateYear.fromCode(appuser.getBirthDate().getYear()).getName());
+    }
     @Override
     public boolean valid() {
         LocalDate birthdate = LocalDate.of(

@@ -48,6 +48,7 @@ public class App extends JFrame {
     }
 
     public App() {
+    
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -229,6 +230,7 @@ public class App extends JFrame {
         rootpanel.setBounds(appdesign.BorderThicknessWindow, appdesign.BorderThicknessWindow, getWidth() - (appdesign.BorderThicknessWindow*2), getHeight() - (appdesign.BorderThicknessWindow*2));
         revalidate();
         repaint();
+        
     }
     public void setFullscreenWindowShape() {
         setShape(appdesign.getFullscreenWindowsShape(getWidth(), getHeight()));
@@ -242,7 +244,6 @@ public class App extends JFrame {
     public static void updateWindow() {
         App appInstance = getAppInstance();
         if (appInstance == null) {return;}
-
         if (appInstance.getExtendedState() == JFrame.MAXIMIZED_BOTH) {
             appInstance.setFullscreenWindowShape();
         } else {

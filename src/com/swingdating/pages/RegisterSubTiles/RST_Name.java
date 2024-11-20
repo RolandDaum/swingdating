@@ -6,6 +6,7 @@ import javax.swing.Box;
 import com.swingdating.Components.InputField;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.AppUserEnums.APU_HairColor;
 
 public class RST_Name extends RST_Layout {
     InputField firstNameIF;
@@ -29,7 +30,12 @@ public class RST_Name extends RST_Layout {
         rootAdd(new InputLabel("Last name", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
         rootAdd(lastNameIF);
         rootAdd(Box.createVerticalGlue());
-
+        loadUserDate();
+    }
+    private void loadUserDate() {
+        if (!appuser.validateData()) {return;}
+        firstNameIF.setValue(appuser.getFirstName());
+        lastNameIF.setValue(appuser.getLastName());
     }
     @Override
     public boolean valid() {

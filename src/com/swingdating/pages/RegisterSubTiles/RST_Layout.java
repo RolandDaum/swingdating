@@ -1,12 +1,9 @@
 package com.swingdating.Pages.RegisterSubTiles;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.swingdating.App;
 import com.swingdating.Components.ScrollBarUI;
 import com.swingdating.System.AppDesign;

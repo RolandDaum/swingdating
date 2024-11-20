@@ -11,9 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.geom.RoundRectangle2D.Float;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -88,7 +85,6 @@ public class PageHome extends JSplitPane {
         setLeftComponent(leftScrollPane);
         setRightComponent(rightScrollPane);
     }
-    
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -108,6 +104,12 @@ public class PageHome extends JSplitPane {
         Button logoutbutton = new Button("LOGOUT", appdesign, new Dimension(175, 50), () -> App.switchToPage(PageLogin.pagename));
         logoutbutton.setAlignmentX(xalignment);
         filterPanel.add(logoutbutton);
+
+        filterPanel.add(Box.createVerticalStrut(25));
+
+        Button editProfButton = new Button("edit profile", appdesign, new Dimension(175, 50), () -> App.switchToPage(PageRegister.pagename));
+        editProfButton.setAlignmentX(xalignment);
+        filterPanel.add(editProfButton);
 
         filterPanel.add(Box.createVerticalStrut(25));
     
@@ -201,6 +203,7 @@ public class PageHome extends JSplitPane {
         return scrollPane;
     }
 
+    // MAIN DATING 'ALGO'
     private void getMatches() {
         String sqlString = "SELECT UUID FROM appusers WHERE ";
         sqlString += "UUID != '" + appuser.getUUID() + "' ";
@@ -249,15 +252,20 @@ public class PageHome extends JSplitPane {
 
         matchesPannel.removeAll();
         if (matchesUUIDs.length <= 1) {
+            matchesPannel.add(Box.createVerticalStrut(20));
             InputLabel ipl = new InputLabel("NO MATCHES FOUND", appdesign);
             ipl.setAlignmentX(Component.CENTER_ALIGNMENT);
             matchesPannel.add(ipl);
+            matchesPannel.add(Box.createVerticalStrut(20));
+            matchesPannel.updateUI();
             return;
         }
         App frame = App.getAppInstance();
+        matchesPannel.add(Box.createVerticalStrut(20));
         InputLabel ipl = new InputLabel(matchesUUIDs.length-1 + " - MATCHES", appdesign);
         ipl.setAlignmentX(Component.CENTER_ALIGNMENT);
         matchesPannel.add(ipl);
+        matchesPannel.add(Box.createVerticalStrut(20));
         for (int i = 1; i < matchesUUIDs.length; i++) {
             matchesPannel.add(new ProfileCardFHP(AppUser.getAppUserByUUID(matchesUUIDs[i][0]), frame));
             matchesPannel.add(Box.createVerticalStrut(20));

@@ -14,6 +14,11 @@ public class RST_Birthplace extends RST_Layout {
         rootAdd(new InputLabel("Place of Birth", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
         birthPlaceInputField = new InputField(appdesign, "Enter Cityname of birthplace");
         rootAdd(birthPlaceInputField);
+        loadUserDate();
+    }
+    private void loadUserDate() {
+        if (!appuser.validateData()) {return;}
+        birthPlaceInputField.setValue(appuser.getBirthplace());
     }
     @Override
     public boolean valid() {

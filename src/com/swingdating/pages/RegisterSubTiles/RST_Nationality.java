@@ -4,6 +4,7 @@ import java.awt.Insets;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.Components.DropDownMenu;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.AppUserEnums.APU_MusicPreference;
 import com.swingdating.System.AppUserEnums.APU_Nationality;
 
 public class RST_Nationality extends RST_Layout {
@@ -16,6 +17,11 @@ public class RST_Nationality extends RST_Layout {
         rootAdd(new InputLabel("Nationality", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
         dropdownmenu = new DropDownMenu<>(appdesign, APU_Nationality.values());
         rootAdd(dropdownmenu);
+        loadUserDate();
+    }
+    private void loadUserDate() {
+        if (!appuser.validateData()) {return;}
+        dropdownmenu.setSelectedItem(APU_Nationality.fromCode(appuser.getNationality().getCode()).getName());
     }
     @Override
     public boolean valid() {

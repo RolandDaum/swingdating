@@ -37,13 +37,16 @@ public class RST_Password extends RST_Layout {
     }
     @Override
     public boolean valid() {
+
         boolean valid = false;
         boolean pwif1IsEmpty = pwIF1.getValue().trim().isEmpty();
         boolean pwif2IsEmpty = pwIF2.getValue().trim().isEmpty();
         boolean pwif1pwif2Same = pwIF1.getValue().equals(pwIF2.getValue());
+        if (appuser.getCDHash() != null && pwif1IsEmpty && pwif2IsEmpty) {
+            return true;
+        }
         if (!pwif1IsEmpty && pwif1pwif2Same) {
             valid = appuser.setCDHash(new CredentialHash(pwIF1.getValue()));
-
         }
         if (!valid) {
             pwIF1.setInvalidValue(true);

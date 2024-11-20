@@ -57,12 +57,12 @@ public class AppUser {
 
     private Integer height;
     private Integer weight;
-    private APU_HairColor hair_color;   // Changed to enum
-    private APU_EyeColor eye_color;     // Changed to enum
+    private APU_HairColor hair_color;  
+    private APU_EyeColor eye_color;    
 
-    private APU_Religion religion;      // Changed to enum
-    private APU_FavoriteSubject favorite_subject;  // Changed to enum
-    private APU_MusicPreference music_preference;  // Changed to enum
+    private APU_Religion religion;    
+    private APU_FavoriteSubject favorite_subject;  
+    private APU_MusicPreference music_preference;  
 
     private Boolean UUIDexistsinDB = false;
 
@@ -99,23 +99,21 @@ public class AppUser {
         DBManagerSQLite db = App.db;
 
         String[][] data = db.get("SELECT * FROM appusers WHERE UUID = '" + UUID + "'");
-        if (data.length <= 1) {
-            return null;
-        }
+        if (data.length <= 1) {return null;}
 
         AppUser appuser = new AppUser(
             data[1][0], data[1][1], new CredentialHash(data[1][2], data[1][3], true), 
             data[1][4], data[1][5], LocalDate.parse(data[1][6]), data[1][7], 
-            APU_Nationality.fromCode(data[1][8]),  // Use fromCode() for enum
-            APU_Gender.fromCode(data[1][9]),      // Use fromCode() for enum
-            APU_Sexuality.fromCode(data[1][10]), // sexuality remains a String
+            APU_Nationality.fromCode(data[1][8]),
+            APU_Gender.fromCode(data[1][9]),      
+            APU_Sexuality.fromCode(data[1][10]), 
             Integer.parseInt(data[1][11]), data[1][12], data[1][13], 
             Integer.parseInt(data[1][14]), Integer.parseInt(data[1][15]), 
-            APU_HairColor.fromCode(data[1][16]),  // Use fromCode() for enum
-            APU_EyeColor.fromCode(data[1][17]),   // Use fromCode() for enum
-            APU_Religion.fromCode(data[1][18]),   // Use fromCode() for enum
-            APU_FavoriteSubject.fromCode(data[1][19]), // Use fromCode() for enum
-            APU_MusicPreference.fromCode(data[1][20]) // Use fromCode() for enum
+            APU_HairColor.fromCode(data[1][16]), 
+            APU_EyeColor.fromCode(data[1][17]),  
+            APU_Religion.fromCode(data[1][18]),  
+            APU_FavoriteSubject.fromCode(data[1][19]), 
+            APU_MusicPreference.fromCode(data[1][20]) 
         );
 
         appuser.UUIDexistsinDB = true;
@@ -126,9 +124,7 @@ public class AppUser {
         DBManagerSQLite db = App.db;
 
         String[][] data = db.get("SELECT * FROM appusers WHERE username = '" + username + "'");
-        if (data.length <= 1) {
-            return null;
-        }
+        if (data.length <= 1) {return null;}
 
         AppUser appuser = new AppUser(
             data[1][0], data[1][1], new CredentialHash(data[1][2], data[1][3], true), 
@@ -224,6 +220,8 @@ public class AppUser {
     public boolean setUsername(String username) {
         if (AppUser.getAppUserByUsername(username) == null && !username.isEmpty() && !username.trim().isEmpty()) {
             this.username = username;
+            return true;
+        } else if (this.username.equals(username)) {
             return true;
         } else {
             return false;

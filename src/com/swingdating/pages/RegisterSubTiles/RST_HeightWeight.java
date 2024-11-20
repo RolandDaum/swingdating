@@ -4,6 +4,7 @@ import java.awt.Insets;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.Components.InputField;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.AppUserEnums.APU_Gender;
 
 public class RST_HeightWeight extends RST_Layout {
     InputField inputFieldHeight;
@@ -19,6 +20,12 @@ public class RST_HeightWeight extends RST_Layout {
         rootAdd(new InputLabel("Weight in kg", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
         inputFieldWeight = new InputField(appdesign, "Weight in kg", true);
         rootAdd(inputFieldWeight);
+        loadUserDate();
+    }
+    private void loadUserDate() {
+        if (!appuser.validateData()) {return;}
+        inputFieldHeight.setValue(String.valueOf(appuser.getHeight()));
+        inputFieldWeight.setValue(String.valueOf(appuser.getWeight()));
     }
     @Override
     public boolean valid() {

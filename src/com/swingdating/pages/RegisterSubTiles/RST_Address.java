@@ -25,8 +25,15 @@ public class RST_Address extends RST_Layout {
         rootAdd(new InputLabel("District", appdesign, new Insets(0, appdesign.inputFieldHeight / 2, appdesign.inputFieldHeight / 4, 0)));
         districtField = new InputField(appdesign, "District name");
         rootAdd(districtField);
+        loadUserDate();
     }
+    private void loadUserDate() {
+        if (!appuser.validateData()) {return;}
+        postalCodeField.setValue(String.valueOf(appuser.getPostalCode()));
+        cityField.setValue(appuser.getCity());
+        districtField.setValue(appuser.getDistrict() == null || appuser.getDistrict().equals("null") ? "" : appuser.getDistrict());
 
+    }
     @Override
     public boolean valid() {
         boolean validPostalCode = appuser.setPostalCode(postalCodeField.getValue().isEmpty() ? 0 : Integer.parseInt(postalCodeField.getValue()));

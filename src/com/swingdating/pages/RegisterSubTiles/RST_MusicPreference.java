@@ -4,6 +4,7 @@ import java.awt.Insets;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.Components.DropDownMenu;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.AppUserEnums.APU_HairColor;
 import com.swingdating.System.AppUserEnums.APU_MusicPreference;
 
 public class RST_MusicPreference extends RST_Layout {
@@ -16,6 +17,11 @@ public class RST_MusicPreference extends RST_Layout {
         rootAdd(new InputLabel("Music Preference", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
         dropdownmenu = new DropDownMenu<>(appdesign, APU_MusicPreference.values());
         rootAdd(dropdownmenu);
+        loadUserDate();
+    }
+    private void loadUserDate() {
+        if (!appuser.validateData()) {return;}
+        dropdownmenu.setSelectedItem(APU_MusicPreference.fromCode(appuser.getMusicPreference().getCode()).getName());
     }
     @Override
     public boolean valid() {

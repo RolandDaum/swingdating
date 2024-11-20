@@ -5,6 +5,7 @@ import javax.swing.Box;
 import com.swingdating.Components.InputField;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.System.AppDesign;
+import com.swingdating.System.AppUserEnums.APU_Sexuality;
 
 public class RST_Username extends RST_Layout {
     InputField usernameInputField;
@@ -19,11 +20,15 @@ public class RST_Username extends RST_Layout {
             }
         });
 
-        usernameInputField.setValue(appuser != null ? appuser.getUsername() : "");
         rootAdd(new InputLabel("Username", appdesign, new Insets(appdesign.inputFieldHeight, appdesign.inputFieldHeight/2, appdesign.inputFieldHeight/4, 0)));
         rootAdd(usernameInputField);
         rootAdd(errorLabel);
         rootAdd(Box.createVerticalGlue());
+            loadUserDate();
+    }
+    private void loadUserDate() {
+        if (appuser.getUsername().isEmpty()) {return;}
+        usernameInputField.setValue(appuser.getUsername());
     }
     @Override
     public boolean valid() {
