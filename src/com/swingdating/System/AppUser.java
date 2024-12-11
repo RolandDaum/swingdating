@@ -14,6 +14,8 @@ import com.swingdating.System.AppUserEnums.APU_Religion;
 import com.swingdating.System.AppUserEnums.APU_Sexuality;
 
 public class AppUser {
+    // SQL DATABASE STRUCTURE
+
     // UUID CHAR(20) PRIMARY KEY NOT NULL,
     // username CHAR(64) NOT NULL,
     // password_hash CHAR(44) NOT NULL,
@@ -39,6 +41,7 @@ public class AppUser {
     // religion CHAR(12) NOT NULL,
     // favorite_subject VARCHAR(60) NOT NULL,
     // music_preference VARCHAR(45) NOT NULL
+
     private String UUID;
     private String username;
     private CredentialHash CredentialHash;
@@ -47,8 +50,8 @@ public class AppUser {
     private String last_name;
     private LocalDate birth_date;
     private String birth_place;
-    private APU_Nationality nationality;  // Changed to enum
-    private APU_Gender gender;            // Changed to enum
+    private APU_Nationality nationality;
+    private APU_Gender gender;
     private APU_Sexuality sexuality;
 
     private Integer postal_code;
@@ -120,6 +123,11 @@ public class AppUser {
 
         return appuser;
     }
+    /**
+     * Returns AppUser object from database with matching username String
+     * @param username String from user to be fetched from DB
+     * @return AppUser
+     */
     public static AppUser getAppUserByUsername(String username) {
         DBManagerSQLite db = App.db;
 
@@ -146,6 +154,10 @@ public class AppUser {
         return appuser;
     }
 
+    /**
+     * Save the AppUser Object to the database. Either UPDATE or INSERT depending on the state of UUIDexistsinDB
+     * @return true / false depending on successfull UPDATE process
+     */
     public boolean savetoDB() {
         createUUID();
         DBManagerSQLite db = App.db;

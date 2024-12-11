@@ -39,12 +39,17 @@ import com.swingdating.App;
 import com.swingdating.System.AppDesign;
 import com.swingdating.System.AppUserEnums.APU_Enum;
 
+
 public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
     private AppDesign appdesign = App.getAppDesign();
     private APU_Enum[] enumValues;
+
+    // Constructor
     public DropDownMenu(AppDesign appdesign, APU_Enum[] enumValues) {
         super(getEnumNames(enumValues));
         this.enumValues = enumValues;
+
+        // Overrides some default ComboBox colors -> Fuck Swing
         UIManager.put("ComboBox.foreground", appdesign.Color_FontPrimary);
         UIManager.put("ComboBox.background", appdesign.Color_BackgroundContainer);
         UIManager.put("ComboBox.selectionForeground", appdesign.Color_FontPrimary);
@@ -91,10 +96,19 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
 
     }
     
+    /**
+     * @return APU_Enum which is currently selected in the DropDownMenu
+     */
     public APU_Enum getSelectedEnum() {
         return (APU_Enum) enumValues[getSelectedIndex()];    
     }
 
+    /**
+     * Converts the APU_Enum List into a String list which then can be used as to construct the framework provided DropDownMenu which only accept String Values I guess
+     * @param <T> APU_Enum Adapter Type
+     * @param enumValues APU_Enum object list
+     * @return String[] with the names provided by the getName() method of APU_Enum Adapter Type
+     */
     private static <T extends APU_Enum> String[] getEnumNames(T[] enumValues) {
         String[] names = new String[enumValues.length];
         for (int i = 0; i < enumValues.length; i++) {
@@ -103,6 +117,9 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
         return names;
     }
     
+    /**
+     * IDK. Does some Popup configuration stuff
+     */
     private void configurePopup() {
         Object o = getAccessibleContext().getAccessibleChild(0);
         if (o instanceof JComponent) {
@@ -113,11 +130,16 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
         }
     }
     
-    private static class HeavyWeightContainerListener implements PopupMenuListener {
+    /**
+     * Custome PopupMenuListener Class
+     * Extens the implemented one by customes Eventlistener
+     * Primarly used for UI update stuff I guess
+     */
+    private class HeavyWeightContainerListener implements PopupMenuListener {
         @Override
         public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
             EventQueue.invokeLater(() -> {
-                JComboBox combo = (JComboBox) e.getSource();
+                JComboBox<APU_Enum> combo = (JComboBox<APU_Enum>) e.getSource();
                 Accessible a = combo.getUI().getAccessibleChild(combo, 0);
                 if (a instanceof BasicComboPopup) {
                     BasicComboPopup popup = (BasicComboPopup) a;
@@ -130,11 +152,14 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
         }
         @Override
         public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
-    
         @Override
         public void popupMenuCanceled(PopupMenuEvent e) {}
     }
     
+    /**
+     * Custome AbstractBorder Class 
+     * Only used for UI decoration
+     */
     private static class RoundedCornerBorder extends AbstractBorder {
         AppDesign appdesign = App.getAppDesign();
         @Override
@@ -175,6 +200,9 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
         }
     }
    
+    /**
+     * Oh what a supprise. A second custome PopupMenuLister Class apeared. I wonder why I've roud two of them. IDK, IDC 
+     */
     private class CustomPopupMenuListener implements PopupMenuListener {
         @Override
         public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
@@ -190,6 +218,10 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
         @Override
         public void popupMenuCanceled(PopupMenuEvent e) {}
     }
+    /**
+     * Edits the comboBox parameters ScrollBar UI appereance
+     * @param comboBox JComboBox<?>
+     */
     private void customizeComboBoxScrollBar(JComboBox<?> comboBox) {
         SwingUtilities.invokeLater(() -> {
             BasicComboPopup popup = (BasicComboPopup) comboBox.getAccessibleContext().getAccessibleChild(0);
@@ -205,15 +237,16 @@ public class DropDownMenu<T extends APU_Enum> extends JComboBox<String> {
     }
 }
 
+/**
+ * Custome BasicComboBoxUI class
+ * Only used for UI decorations (Includes custome Arrow Button and other stuff I don't know any more)
+ */
 class CustomeComboBoxButtonUI extends BasicComboBoxUI {
     private final ImageIcon icon;
     private JButton arrowButton;
-    private boolean isRotated = false;
-    private AppDesign appdesign;
 
     public CustomeComboBoxButtonUI(ImageIcon icon, AppDesign appdesign) {
         this.icon = scaleIcon(icon, 14, 11); // Skaliert das Icon auf eine Größe von 24x24 Pixel
-        this.appdesign = appdesign;
     }
 
     @Override
@@ -228,7 +261,6 @@ class CustomeComboBoxButtonUI extends BasicComboBoxUI {
 
     public void rotateIcon(boolean rotate) {
         arrowButton.setIcon(getRotatedIcon(icon, rotate ? 180 : 0));
-        isRotated = rotate;
     }
 
     private ImageIcon scaleIcon(ImageIcon icon, int width, int height) {

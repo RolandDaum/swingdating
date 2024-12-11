@@ -5,7 +5,6 @@ import javax.swing.Box;
 import com.swingdating.Components.InputField;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.AppUserEnums.APU_Sexuality;
 
 public class RST_Username extends RST_Layout {
     InputField usernameInputField;

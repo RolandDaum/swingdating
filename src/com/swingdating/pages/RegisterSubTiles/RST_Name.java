@@ -2,11 +2,9 @@ package com.swingdating.Pages.RegisterSubTiles;
 
 import java.awt.Insets;
 import javax.swing.Box;
-
 import com.swingdating.Components.InputField;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.AppUserEnums.APU_HairColor;
 
 public class RST_Name extends RST_Layout {
     InputField firstNameIF;

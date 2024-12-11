@@ -38,10 +38,12 @@ public class RST_Layout extends JScrollPane {
         return false;
     }
     
+    // Add stuff to the RST root panel
     public void rootAdd(Component comp) {
         rootpanel.add(comp);
     }
 
+    // can be called if last data input has been submitted
     public void onSubmit(Runnable onSubmit) {
         this.onSubmit = onSubmit;
     }

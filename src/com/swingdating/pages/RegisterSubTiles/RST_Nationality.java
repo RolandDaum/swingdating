@@ -4,7 +4,6 @@ import java.awt.Insets;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.Components.DropDownMenu;
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.AppUserEnums.APU_MusicPreference;
 import com.swingdating.System.AppUserEnums.APU_Nationality;
 
 public class RST_Nationality extends RST_Layout {

@@ -8,7 +8,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
-
 import com.swingdating.App;
 import com.swingdating.Components.Button;
 import com.swingdating.Components.InputField;
@@ -23,7 +22,6 @@ public class PageLogin extends JPanel {
 
     private JPanel rootpanel;
     private String username;
-    private String password;
 
     public PageLogin(AppDesign appdesign) {
         // LAYOUT AND DESIGN
@@ -47,7 +45,6 @@ public class PageLogin extends JPanel {
         passwordPanel.setBackground(appdesign.Color_BackgroundMain);
         passwordPanel.add(inpl_password);
         inputfield_Password.onSubmit((value) -> {button.doClick(); inputfield_Password.removeFocus();});
-        inputfield_Password.onType((password) -> this.password = password);
 
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 

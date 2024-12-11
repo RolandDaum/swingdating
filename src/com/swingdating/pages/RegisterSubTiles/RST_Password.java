@@ -1,10 +1,7 @@
 package com.swingdating.Pages.RegisterSubTiles;
 
 import java.awt.Insets;
-
 import javax.swing.Box;
-
-import com.swingdating.Components.Button;
 import com.swingdating.Components.InputField;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.System.AppDesign;

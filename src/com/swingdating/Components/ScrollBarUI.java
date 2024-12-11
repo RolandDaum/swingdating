@@ -13,6 +13,7 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import com.swingdating.App;
 import com.swingdating.System.AppDesign;
 
+// Customized BasicScrollBarUI class (UI only)
 public class ScrollBarUI extends BasicScrollBarUI {
     private boolean isThumbHovered = false;
     private AppDesign appdesign = App.getAppDesign();

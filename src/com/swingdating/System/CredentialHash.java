@@ -21,17 +21,22 @@ public class CredentialHash {
     /**
      * Generates a new CredentialHash with a given salt String
      * @param password Password as String
-     * @param password_salt Password Salt as String
+     * @param password_salt Salt as String
      */
     public CredentialHash(String password, String password_salt) {
         this.password_salt = password_salt;
         this.password_hash = generateSaltedHash(password, this.password_salt);
     }
+    /**
+     * Creates a new CredentialHash with a given password hash and password salt
+     * @param password_hash String password Hash.
+     * @param password_salt String password Salt.
+     * @param hashNSalt Boolean. Only exists because of double constuctors. Don't care about it.
+     */
     public CredentialHash(String password_hash, String password_salt, boolean hashNSalt) {
         this.password_hash =  password_hash;
         this.password_salt = password_salt;
     }
-    
     private String generateSalt() {
         byte[] salt = new byte[16];
         new SecureRandom().nextBytes(salt);
@@ -46,10 +51,20 @@ public class CredentialHash {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Compares the param pwtocompare with the existing CredentialHash Object
+     * @param pwtocompare String password to be compared
+     * @return true / false if password is matching or not
+     */
     public boolean verifyPassword(String pwtocompare) {
         return (new CredentialHash(pwtocompare, this.password_salt)).getCredentialHash().equals(password_hash);
     }
+    /**
+     * Compares to CredentialObjects
+     * @param userPWHash CredentialHash 
+     * @param ComparingPWHash CredentialHash
+     * @return true / false if password is matching or not
+     */
     public static boolean verifyPassword(CredentialHash userPWHash, String ComparingPWHash) {
         return userPWHash.getCredentialHash().equals(ComparingPWHash);
     }

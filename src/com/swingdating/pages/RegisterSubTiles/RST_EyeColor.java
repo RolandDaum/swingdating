@@ -4,7 +4,6 @@ import java.awt.Insets;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.Components.DropDownMenu;
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.AppUserEnums.APU_BirthdateDay;
 import com.swingdating.System.AppUserEnums.APU_EyeColor;
 
 public class RST_EyeColor extends RST_Layout {

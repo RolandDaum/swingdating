@@ -4,7 +4,6 @@ import java.awt.Insets;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.Components.InputField;
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.AppUserEnums.APU_Gender;
 
 public class RST_HeightWeight extends RST_Layout {
     InputField inputFieldHeight;

@@ -9,13 +9,25 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// Custome Action buttons for the titlebar only -> Max, Min, close
 public class TitlebarActionButton extends JButton {
     AppDesign appdesign;
     Boolean exitbutton = false;
+
+    // Constructor
+    /**
+     * @param assetName String defined in AppDesign class
+     * @param appdesign AppDesign
+     * @param exitbutton Boolean true if button is supposed to be an exit button with hover effect etc.
+     */
     public TitlebarActionButton(String assetName, AppDesign appdesign, Boolean exitbutton) {
         this(assetName, appdesign);
         this.exitbutton = exitbutton;
     }
+    /**
+     * @param assetName String defined in AppDesign class
+     * @param appdesign AppDesign
+     */
     public TitlebarActionButton(String assetName, AppDesign appdesign) {
         this.appdesign = appdesign;
         setPreferredSize(new Dimension(appdesign.titlebarHeight-10, appdesign.titlebarHeight-10));
@@ -46,11 +58,17 @@ public class TitlebarActionButton extends JButton {
 
         
     }
+    
+    /**
+     * Add the provided assetName as Icon
+     * @param assetName
+     */
     public void setButtonIcon(String assetName) {
         setIcon(new ImageIcon(new ImageIcon(System.getProperty("user.dir") + "/src/com/swingdating/assets/" + assetName).getImage().getScaledInstance(appdesign.titlebarHeight-20, appdesign.titlebarHeight-20, Image.SCALE_SMOOTH)));
     }
 
 
+    // UI Stuff
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -60,7 +78,6 @@ public class TitlebarActionButton extends JButton {
         super.paintComponent(g2);
         g2.dispose();
     }
-
     @Override
     protected void paintBorder(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();

@@ -2,13 +2,11 @@ package com.swingdating.Components;
 
 import java.awt.Font;
 import java.awt.Insets;
-
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
 import com.swingdating.System.AppDesign;
 
+// Custome JLabel with added margin functionallity
 public class InputLabel extends JLabel {
     public InputLabel(String label, AppDesign appdesign) {
         this(label, appdesign, new Insets(0, 0, 0, 0));
@@ -19,5 +17,4 @@ public class InputLabel extends JLabel {
         setForeground(appdesign.Color_FontSecondary);
         setBorder(BorderFactory.createEmptyBorder(margin.top, margin.left, margin.bottom, margin.right));
     }
-
 }

@@ -3,7 +3,6 @@ package com.swingdating.Components;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import com.swingdating.System.AppDesign;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,24 +13,25 @@ import java.util.function.Consumer;
 
 public class InputField extends JPanel {
 
-    private Consumer<String> onType;    // Changed to Consumer<String>
+    private Consumer<String> onType;
     private Runnable onActive;
     private Runnable onInactive;
     private Consumer<String> onSubmit;
 
+    // inputfieldPassword only exists if Object created with passwordfield bool set to true. inputfield always exists.
+    // JPasswordField is and extended Version of JTextField and therefore has the same base attributes and methods
     private JTextField inputfield;
     private JPasswordField inputfieldPassword;
 
     private boolean invalidValue = false;
 
     private boolean numbersonly = false;
-    private int minNumber = 0;
-    private int maxNumber = 0;
 
     private AppDesign appdesign;
 
     private Dimension preferedSize;
 
+    // Constructors
     public InputField(AppDesign appdesign) {
         this(appdesign, false, null, false);
     }
@@ -50,6 +50,7 @@ public class InputField extends JPanel {
     public InputField(AppDesign appdesign, Boolean passwordfield, String tooltip, boolean numbersonly) {
         this(appdesign, passwordfield, tooltip, numbersonly, new Dimension(appdesign.inputFieldWidth, appdesign.inputFieldHeight));
     }
+    // Main Constructor
     public InputField(AppDesign appdesign, Boolean passwordfield, String tooltip, boolean numbersonly, Dimension preferedSize) {
         this.appdesign = appdesign;
         this.numbersonly = numbersonly;
@@ -60,6 +61,7 @@ public class InputField extends JPanel {
         setPreferredSize(preferedSize);
         setSize(getPreferredSize());
 
+        // Creates Inputfield depending on passwordfield bool param
         if (passwordfield) {
             inputfieldPassword = new JPasswordField() {
                 @Override
@@ -92,7 +94,6 @@ public class InputField extends JPanel {
         
         inputfield.setToolTipText(tooltip);
         inputfield.setOpaque(false);
-        // inputfield.setAlignmentX(Component.CENTER_ALIGNMENT);
         inputfield.setPreferredSize(new Dimension(preferedSize.width-2, preferedSize.height-2));
         inputfield.setBorder(BorderFactory.createEmptyBorder(0, preferedSize.height/3, 0, preferedSize.height/3)); // Inner padding
         inputfield.setForeground(appdesign.Color_FontPrimary);
@@ -157,7 +158,6 @@ public class InputField extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(invalidValue ? appdesign.Color_AccentSecondary : appdesign.Color_BorderLight); // This changes the bordre color
@@ -165,6 +165,9 @@ public class InputField extends JPanel {
         g2.dispose();
     }
 
+    /**
+     * Checks for non int chars. Used when numbersonly bool param is true
+     */
     private void inputTypeChecker() {
         String value = inputfield.getText();
         if (!this.numbersonly || value.isEmpty()) {return;}
@@ -181,8 +184,8 @@ public class InputField extends JPanel {
     }
     
 
-    // Methoden zum Setzen der Events
-    public void onType(Consumer<String> onType) { // Change method signature
+    // Methods to set different Event Runnables/Consumer
+    public void onType(Consumer<String> onType) {
         this.onType = onType;
     }
     public void onActive(Runnable onActive) {
@@ -195,6 +198,7 @@ public class InputField extends JPanel {
         this.onSubmit = onSubmit;
     }
     
+    // Some Class methods -> The do what theire name suggest the do
     public String getValue() {
         return inputfield.getText();    
     }

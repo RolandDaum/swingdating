@@ -1,9 +1,10 @@
 import com.swingdating.System.DBManagerSQLite;
 
+// CLASS AND METHOD TO EDIT DB MANUALLY -> USED FOR DB TRANSFER
 public class DBRebuild {
-    public static void neverrunthisunlessyouknowwhatyourdoingwhatyouprobalbydonot(String[] args) {
+    public static void neverrunthisunlessyouknowwhatyourdoingwhatyouprobablydonot(String[] args) {
         // DBManagerSQLite dbOLD = new DBManagerSQLite("jdbc:sqlite:src/com/swingdating/OLD.db");
-        DBManagerSQLite db = new DBManagerSQLite("jdbc:sqlite:src/com/swingdating/appdb.db");
+        // DBManagerSQLite db = new DBManagerSQLite("jdbc:sqlite:src/com/swingdating/appdb.db");
 
         // db.update("UPDATE appusers SET nationality = 'DEU' WHERE nationality = 'deutsch'");
         // db.update("UPDATE appusers SET nationality = 'IRQ' WHERE nationality = 'irakisch'");
@@ -11,7 +12,7 @@ public class DBRebuild {
         // db.update("UPDATE appusers SET nationality = 'RUS' WHERE nationality = 'russisch'");
         // db.update("UPDATE appusers SET nationality = 'CAF' WHERE nationality = 'tuerkisch'");
         // db.update("UPDATE appusers SET nationality = 'TUR' WHERE nationality = 'afrikanisch'");
-        db.update("UPDATE appusers SET sexuality = 'hetrosexual' WHERE sexuality = 'heterosexual'");
+        // db.update("UPDATE appusers SET sexuality = 'hetrosexual' WHERE sexuality = 'heterosexual'");
         // db.update("UPDATE appusers SET sexuality = 'bisexual' WHERE sexuality = 'bisexuell'");
         // db.update("UPDATE appusers SET sexuality = 'homosexual' WHERE sexuality = 'homosexuell'");
         // db.update("UPDATE appusers SET religion = 'EV' WHERE religion = 'evangelisch'");

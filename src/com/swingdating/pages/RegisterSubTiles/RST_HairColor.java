@@ -4,7 +4,6 @@ import java.awt.Insets;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.Components.DropDownMenu;
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.AppUserEnums.APU_Gender;
 import com.swingdating.System.AppUserEnums.APU_HairColor;
 
 public class RST_HairColor extends RST_Layout {

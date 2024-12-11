@@ -1,14 +1,11 @@
 package com.swingdating.Components;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.BorderFactory;
@@ -24,9 +21,8 @@ import com.swingdating.System.AppDesign;
 import com.swingdating.System.AppUser;
 
 public class ProfileCardFHP extends JPanel {
-
     AppDesign appdesign = App.getAppDesign();
-
+    // Constructor
     public ProfileCardFHP(AppUser appuser, JFrame parentFrame) {
         AppDesign appdesign = App.getAppDesign();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -56,6 +52,7 @@ public class ProfileCardFHP extends JPanel {
         add(Box.createVerticalStrut(15));
         add(detailsButton);
     }
+    // Some UI edits
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -72,6 +69,11 @@ public class ProfileCardFHP extends JPanel {
         g2.dispose();
     }
 
+    /**
+     * Creates a popup Profile Details Card
+     * @param appuser AppUser
+     * @param parentFrame JFrame to be used as the anchor point for the popup
+     */
     private static void showProfileDetails(AppUser appuser, JFrame parentFrame) {
         AppDesign appdesign = App.getAppDesign();
         JDialog dialog = new JDialog(parentFrame, "Profile Details", true);
@@ -115,7 +117,13 @@ public class ProfileCardFHP extends JPanel {
         dialog.add(rootpanel);
         dialog.setVisible(true);
     }
-    private static Component createProfDetailCard(String description, String content) {
+    /**
+     * Creates a custome Profile Detail Card
+     * @param description String main content
+     * @param title String Title
+     * @return Component
+     */
+    private static Component createProfDetailCard(String description, String title) {
         AppDesign appdesign = App.getAppDesign();
         JPanel panel = new JPanel(){
             @Override
@@ -140,7 +148,7 @@ public class ProfileCardFHP extends JPanel {
         panel.setBorder(BorderFactory.createEmptyBorder(10,20,10,20));
         panel.setBackground(appdesign.Color_BackgroundContainer);
         JLabel descriptionLabel = new JLabel(description);
-        JLabel contentLabel = new JLabel(content);
+        JLabel contentLabel = new JLabel(title);
         descriptionLabel.setFont(new Font("Roboto Medium", Font.PLAIN, 12));
         descriptionLabel.setForeground(appdesign.Color_FontSecondary);
         contentLabel.setFont(new Font("Roboto Bold", Font.PLAIN, 16));
@@ -152,7 +160,12 @@ public class ProfileCardFHP extends JPanel {
 
 
         return panel;
-    }
+    } 
+    /**
+     * Adds all the different appuser Profile details to the given JPanel
+     * @param panel JPanl to be used for data insertion
+     * @param appuser AppUser Object which will be loaded
+     */
     private static void addProfDetailCards(JPanel panel, AppUser appuser) {
         panel.add(createProfDetailCard("Name:" , appuser.getFirstName() + " " + appuser.getLastName()));
         panel.add(Box.createVerticalStrut(20));
@@ -160,7 +173,19 @@ public class ProfileCardFHP extends JPanel {
         panel.add(Box.createVerticalStrut(20));
         panel.add(createProfDetailCard("Sexuality:" , appuser.getSexuality().getName()));
         panel.add(Box.createVerticalStrut(20));
-        panel.add(createProfDetailCard("Location:" , appuser.getPostalCode() + " " + appuser.getCity()));
-        // TODO: Add more information about the user
+        panel.add(createProfDetailCard("Location:" , appuser.getPostalCode() + " " + appuser.getCity() + " " + (appuser.getDistrict().equals("null") ? "" : appuser.getDistrict())));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Nationality:" , appuser.getNationality().getName()));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Body:" , appuser.getHeight() + " cm   |   " + appuser.getWeight() + " kg"));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Colors:" , appuser.getHairColor().getName() + " hair   |   " + appuser.getEyeColor().getName() + " eyes"));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Religion:" , appuser.getReligion().getName()));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Favorite Subject:" , appuser.getFavoriteSubject().getName()));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createProfDetailCard("Favorite Music:" , appuser.getMusicPreference().getName()));
+        
     }
 }

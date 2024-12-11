@@ -1,5 +1,5 @@
 package com.swingdating.Components;
-import com.swingdating.App;
+
 import com.swingdating.System.AppDesign;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,14 +8,29 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 
+// Customized Button Design
 public class Button extends JButton {
 
     private AppDesign appdesign;
     private boolean isHoverd = false;
 
+    // Constructors
+    /**
+     * Creates Button Component
+     * @param title String Button title
+     * @param appdesign AppDesign appdesign Object
+     * @param onclick Runnable Method executed when the button has been clicked
+     */
     public Button(String title, AppDesign appdesign, Runnable onclick) {
         this(title, appdesign, new Dimension((appdesign.inputFieldWidth/2),appdesign.inputFieldHeight), onclick);
     }
+    /**
+     * Creates Button Component
+     * @param title String Button title
+     * @param appdesign AppDesign appdesign Object
+     * @param Dimension Dimension size of the button
+     * @param onclick Runnable Method executed when the button has been clicked
+     */
     public Button(String title, AppDesign appdesign, Dimension Dimension, Runnable onclick) {
         super(title);
         this.appdesign = appdesign;
@@ -32,7 +47,7 @@ public class Button extends JButton {
         setForeground(appdesign.Color_FontPrimary);
         setFont(new Font("Roboto Medium", Font.PLAIN, 14));
 
-        // Hover-Effekt
+        // Hover Eventlistener
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -49,6 +64,7 @@ public class Button extends JButton {
             }
         });
         
+        // Click Eventlistener
         addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,18 +76,17 @@ public class Button extends JButton {
         });
     }
 
+    // UI Changing stuff
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     
-        // Hintergrund zeichnen
         g2.setColor(isHoverd ? appdesign.Color_BackgroundOnContainer : appdesign.Color_BackgroundContainer);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
     
-        // Border zeichnen mit angepasster Dicke
         g2.setColor(appdesign.Color_BorderLight);
-        g2.setStroke(new BasicStroke(appdesign.BorderThickness)); // Setze die Strichbreite für den Rahmen
+        g2.setStroke(new BasicStroke(appdesign.BorderThickness));
         g2.drawRoundRect(appdesign.BorderThickness/2, appdesign.BorderThickness/2, getWidth()- appdesign.BorderThickness, getHeight() - appdesign.BorderThickness, appdesign.BorderRadiusComponents, appdesign.BorderRadiusComponents);
         setForeground(isHoverd ? appdesign.Color_FontSecondary : appdesign.Color_FontPrimary);
 

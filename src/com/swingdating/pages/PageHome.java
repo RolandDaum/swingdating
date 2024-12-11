@@ -40,9 +40,11 @@ public class PageHome extends JSplitPane {
     private AppDesign appdesign;
     private AppUser appuser = App.getAppUser();
 
+    // Splitpane Panels
     private JPanel filterPanel;
     private JPanel matchesPannel;
 
+    // Filter Items
     private CheckBoxFHP religionFCB;
     private InputField ageFIF;
     private CheckBoxFHP sexualityFCB;
@@ -98,32 +100,39 @@ public class PageHome extends JSplitPane {
         g2.dispose();
     }
 
+    /**
+     * Adding all the different filter UI Elements to the left Panel
+     */
     private void addFilteItems() {
         float xalignment = Component.LEFT_ALIGNMENT;
 
+        // Logout Button
         Button logoutbutton = new Button("LOGOUT", appdesign, new Dimension(175, 50), () -> App.switchToPage(PageLogin.pagename));
         logoutbutton.setAlignmentX(xalignment);
         filterPanel.add(logoutbutton);
 
         filterPanel.add(Box.createVerticalStrut(25));
 
+        // Edit Profile Button
         Button editProfButton = new Button("edit profile", appdesign, new Dimension(175, 50), () -> App.switchToPage(PageRegister.pagename));
         editProfButton.setAlignmentX(xalignment);
         filterPanel.add(editProfButton);
 
         filterPanel.add(Box.createVerticalStrut(25));
     
+        // Max Agedelta input field
         JLabel ageLabel = new InputLabel("   Max Age Difference", appdesign);
         ageLabel.setAlignmentX(xalignment);
         filterPanel.add(ageLabel);
         filterPanel.add(Box.createVerticalStrut(10));
         ageFIF = new InputField(appdesign, "Input max age difference", true, new Dimension(175, 50));
         ageFIF.setAlignmentX(xalignment);
-        ageFIF.onType((value) -> getMatches());
+        ageFIF.onType(value -> getMatches());
         filterPanel.add(ageFIF);
 
         filterPanel.add(Box.createVerticalStrut(25));
 
+        // Checkbox for matching sexuality
         JLabel sexLabel = new InputLabel("   Matching sexuality", appdesign);
         sexLabel.setAlignmentX(xalignment);
         filterPanel.add(sexLabel);
@@ -135,6 +144,7 @@ public class PageHome extends JSplitPane {
 
         filterPanel.add(Box.createVerticalStrut(25));
 
+        // Checkbox for matching religion
         JLabel religionLabel = new InputLabel("   Matching religion", appdesign);
         religionLabel.setAlignmentX(xalignment);
         filterPanel.add(religionLabel);
@@ -146,6 +156,7 @@ public class PageHome extends JSplitPane {
 
         filterPanel.add(Box.createVerticalStrut(25));
 
+        // Checkbox for matching nationality
         JLabel nationalityLabel = new InputLabel("   Matching nationality", appdesign);
         nationalityLabel.setAlignmentX(xalignment);
         filterPanel.add(nationalityLabel);
@@ -157,6 +168,7 @@ public class PageHome extends JSplitPane {
 
         filterPanel.add(Box.createVerticalStrut(25));
 
+        // Checkbox for same ZIP
         JLabel nearbyLabel = new InputLabel("   Match nearby", appdesign);
         nearbyLabel.setAlignmentX(xalignment);
         filterPanel.add(nearbyLabel);
@@ -168,6 +180,7 @@ public class PageHome extends JSplitPane {
 
         filterPanel.add(Box.createVerticalStrut(25));
 
+        // Checkbox for matching subject preference
         JLabel subjectLabel = new InputLabel("   Matching subject preferences", appdesign);
         subjectLabel.setAlignmentX(xalignment);
         filterPanel.add(subjectLabel);
@@ -179,6 +192,7 @@ public class PageHome extends JSplitPane {
 
         filterPanel.add(Box.createVerticalStrut(25));
 
+        // Checkbox for matching music preference
         JLabel musicLabel = new InputLabel("   Matching music preferences", appdesign);
         musicLabel.setAlignmentX(xalignment);
         filterPanel.add(musicLabel);
@@ -205,6 +219,7 @@ public class PageHome extends JSplitPane {
 
     // MAIN DATING 'ALGO'
     private void getMatches() {
+        // Creates the SELECT SQL Statement String
         String sqlString = "SELECT UUID FROM appusers WHERE ";
         sqlString += "UUID != '" + appuser.getUUID() + "' ";
         if (!ageFIF.getValue().isEmpty())  {
@@ -248,8 +263,9 @@ public class PageHome extends JSplitPane {
         if (subjectPrefFCB.isSelected()) {
             sqlString += "AND favorite_subject = '" + appuser.getFavoriteSubject().getCode() + "' ";
         }
-        String[][] matchesUUIDs = App.db.get(sqlString);
+        String[][] matchesUUIDs = App.db.get(sqlString); // Main DB Call
 
+        // Inserts the 'new' matching user panel
         matchesPannel.removeAll();
         if (matchesUUIDs.length <= 1) {
             matchesPannel.add(Box.createVerticalStrut(20));
@@ -270,10 +286,13 @@ public class PageHome extends JSplitPane {
             matchesPannel.add(new ProfileCardFHP(AppUser.getAppUserByUUID(matchesUUIDs[i][0]), frame));
             matchesPannel.add(Box.createVerticalStrut(20));
         }
-        matchesPannel.updateUI();
+        matchesPannel.updateUI(); // Updates UI to show the new users
     }
 }
 
+/**
+ * Customize the SplitPane UI
+ */
 class CustomSplitPaneUI extends BasicSplitPaneUI {
     private boolean isHovered = false;
     private boolean isMoving = false;

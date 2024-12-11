@@ -41,14 +41,13 @@ public class App extends JFrame {
     private boolean resizing_horzL = false;
     private boolean resizing_horzR = false;
     private boolean resizing_vertB = false;
-    private boolean resizing_vertT = false;
+    private boolean resizing_vertT = false; // Vetical Top resize is not implemented
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(App::new);
     }
 
     public App() {
-    
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
@@ -223,14 +222,14 @@ public class App extends JFrame {
         // switchToPage(PageHome.pagename);
     }
 
+    // Methods used to updated the border and size of the Main JFrame border and Background
     private void setDefaultWindowShape() {
         setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), appdesign.BorderRadiusWindow, appdesign.BorderRadiusWindow));
         getContentPane().setBackground(appdesign.Color_BorderLight);
         rootpanel.setBackground(appdesign.Color_BorderLight);
         rootpanel.setBounds(appdesign.BorderThicknessWindow, appdesign.BorderThicknessWindow, getWidth() - (appdesign.BorderThicknessWindow*2), getHeight() - (appdesign.BorderThicknessWindow*2));
         revalidate();
-        repaint();
-        
+        repaint();  
     }
     public void setFullscreenWindowShape() {
         setShape(appdesign.getFullscreenWindowsShape(getWidth(), getHeight()));
@@ -241,6 +240,9 @@ public class App extends JFrame {
         repaint();
 
     }
+    /**
+     * Call to update the window if somehow visual bugs appearing
+     */
     public static void updateWindow() {
         App appInstance = getAppInstance();
         if (appInstance == null) {return;}
@@ -251,26 +253,31 @@ public class App extends JFrame {
         }
     }
     
-    /*
-     * Login will always be index 0 in the appinstance cardlayout and never even think about to remove it -> Dangerous
+    /**
+     * @param pageName String which is equivalent to the 'Page[NAME].pagename'
      */
     public static void switchToPage(String pageName) {
         App appinstance = App.getAppInstance();
         try {   appinstance.mainPanel.remove(1);    } catch (Exception e) {}
         if (pageName.equals(PageHome.pagename)) {
+            App.setWindowTitle(PageHome.pagename);
             appinstance.mainPanel.add(new PageHome(appinstance.appdesign), PageHome.pagename);
             appinstance.mainPanelCardLayout.show(appinstance.mainPanel, PageHome.pagename);
         } else if (pageName.equals(PageRegister.pagename)) {
+            App.setWindowTitle(PageRegister.pagename);
             appinstance.mainPanel.add(new PageRegister(appinstance.appdesign), PageRegister.pagename);
             appinstance.mainPanelCardLayout.show(appinstance.mainPanel, PageRegister.pagename);;
         } else if (pageName.equals(PageLogin.pagename)) {
+            App.setWindowTitle(PageLogin.pagename);
             App.removeGlobalUser();
             appinstance.mainPanelCardLayout.show(appinstance.mainPanel, PageLogin.pagename);;
         }
-
         updateWindow();
     }
 
+    /**
+     * @return current window title as String
+     */
     public static String getWindowTitle() {
         App appInstance = getAppInstance();
         if (appInstance != null && appInstance.titlebar != null) {
@@ -278,6 +285,9 @@ public class App extends JFrame {
         }
         return "";
     }
+    /**
+     * @param title as String to be set as the new window title
+     */
     public static void setWindowTitle(String title) {
         App appInstance = getAppInstance();
         if (appInstance != null && appInstance.titlebar != null) {
@@ -285,26 +295,42 @@ public class App extends JFrame {
         }
         updateWindow();
     }
-
+    /**
+     * Global method to get the AppUser
+     * @return the current AppUser Object stored in the main App instance
+     */
     public static AppUser getAppUser() {
         App appinstance = App.getAppInstance();
 
         return (appinstance == null) ? null : appinstance.appuser;
     }
+    /**
+     * Global method to update the AppUser
+     * @param appuser overrides the currently stored AppUser Object in the main App instance
+     */
     public static void setAppUser(AppUser appuser) {
         removeGlobalUser();
         App.getAppInstance().appuser = appuser;
     }
+    /**
+     * Removes the stored AppUser and replace it with null.
+     */
     public static void removeGlobalUser() {
         App.getAppInstance().appuser = null;
     }
-
+    /**
+     * Get the global AppDesign object if a page or component did not get it via a parameter
+     * @return the globaly used AppDesign Object.
+     */
     public static AppDesign getAppDesign() {
         App appinstance = App.getAppInstance();
         return appinstance.appdesign;
     }
+    /**
+     * Get the main AppInstance Object (JFrame) to edit attributes used globaly, e.g. AppUser
+     * @return App main App instance
+     */
     public static App getAppInstance() {
         return (App) SwingUtilities.getWindowAncestor(rootpanel);
-    }
-    
+    }    
 }

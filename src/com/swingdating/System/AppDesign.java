@@ -41,8 +41,10 @@ public class AppDesign {
     public String AssetName_Icon_Titlebar_Minimize = "Icon_Titlebar_Minimize.png";
     public Character PasswordFiledChar = '*';
 
+    // BOOLEAN STATES
     public Boolean darkmodeenabled;
 
+    // FONT LIST
     private List<String> fontlist = new ArrayList<>(Arrays.asList(
         "Orbitron-Black.ttf",
         "Orbitron-Bold.ttf",
@@ -66,6 +68,16 @@ public class AppDesign {
     ));
     public Map<String,Font> fonts = new HashMap<>();
 
+    /**
+     * Creates AppDesign with darkmode enabled set to true
+     */
+    public AppDesign() {
+        this(true);
+    }
+    /**
+     * Creates AppDesign with given darkmode boolean parameter
+     * @param darkmodeenabled boolean 
+     */
     public AppDesign(boolean darkmodeenabled) {
         this.darkmodeenabled = darkmodeenabled;
 
@@ -108,7 +120,7 @@ public class AppDesign {
     }
 
 
-
+    // Some stuff for the main window frame design. IDK if still in use. Anyway who cares
     // x: 0, y: 0 - Start/Location Coordinates
     public Shape getFullscreenWindowsShape(int width, int height) {
         return new RoundRectangle2D.Double(0, 0, width, height, 0,0);

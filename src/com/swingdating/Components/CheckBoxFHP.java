@@ -27,6 +27,7 @@ public class CheckBoxFHP extends JPanel {
     private AppDesign appdesign;
     public Runnable onChange;
 
+    // Constructor
     public CheckBoxFHP(AppDesign appdesign, String label, Insets paddingInsets) {
         this.appdesign = appdesign;
         this.label = label;
@@ -44,9 +45,10 @@ public class CheckBoxFHP extends JPanel {
         checkBox.setFocusPainted(false); 
 
         checkBox.setBorder(BorderFactory.createEmptyBorder(paddingInsets.top, paddingInsets.left, paddingInsets.bottom, paddingInsets.right));
-        checkBox.setIcon(new RoundedCheckBoxIcon(appdesign, false)); // Setze das ungeprüfte Icon
+        checkBox.setIcon(new RoundedCheckBoxIcon(appdesign, false));
         checkBox.setSelectedIcon(new RoundedCheckBoxIcon(appdesign, true)); 
 
+        // Checkbox State Eventlistner
         checkBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -56,7 +58,7 @@ public class CheckBoxFHP extends JPanel {
             }
         });
             
-
+        // Checkbox Hover EventListener
         checkBox.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -87,6 +89,7 @@ public class CheckBoxFHP extends JPanel {
         g2.dispose();
     }
 
+    // Runnable set and trigger methods
     public boolean isSelected() {
         return checkBox.isSelected();
     }
@@ -104,7 +107,7 @@ public class CheckBoxFHP extends JPanel {
     }
     public void setLabel(String label) {
         this.label = label;
-        checkBox.setText(label); // Update das Label der Checkbox
+        checkBox.setText(label);
     }
     public void setOnChange(Runnable onChange) {
         this.onChange = onChange;
@@ -112,8 +115,8 @@ public class CheckBoxFHP extends JPanel {
 }
 
 class RoundedCheckBoxIcon implements Icon {
-    private final int size = 20; // Größe der Checkbox
-    private final boolean selected; // Status der Checkbox (ausgewählt oder nicht)
+    private final int size = 20;
+    private final boolean selected;
     private AppDesign appdesign;
     public RoundedCheckBoxIcon(AppDesign appdesign, boolean selected) {
         this.appdesign = appdesign;

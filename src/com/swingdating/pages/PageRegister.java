@@ -5,9 +5,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.AppUser;
 import com.swingdating.App;
 import com.swingdating.Components.Button;
 import com.swingdating.Pages.RegisterSubTiles.RST_Address;
@@ -40,6 +38,7 @@ public class PageRegister extends JPanel {
     private Button nextButton;
 
     public PageRegister(AppDesign appdesign) {
+        // Bacis page setup
         this.appdesign = appdesign;
         loadRSTPages();
         setName(pagename);
@@ -55,15 +54,16 @@ public class PageRegister extends JPanel {
         cardLayout.show(cardPanel, RST_PagesList.get(pageCounter).getName());
         App.setWindowTitle("register   >   " + RST_PagesList.get(pageCounter).getName());
 
+        // Navigation Button panel
         prevButton = new Button("- / -", appdesign, new Dimension((appdesign.inputFieldWidth/2)-5,appdesign.inputFieldHeight), () -> prevBAC());
         nextButton = new Button("Next", appdesign, new Dimension((appdesign.inputFieldWidth/2)-5,appdesign.inputFieldHeight), () -> nextBAC());
-
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 20));
         buttonPanel.setOpaque(false);
         buttonPanel.add(prevButton);
         buttonPanel.add(Box.createHorizontalStrut(10));
         buttonPanel.add(nextButton);
 
+        // UI Compelation
         rootpanel = new JPanel();
         rootpanel.setOpaque(false);
         rootpanel.setLayout(new BoxLayout(rootpanel, BoxLayout.Y_AXIS));

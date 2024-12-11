@@ -4,7 +4,6 @@ import java.awt.Insets;
 import com.swingdating.Components.InputLabel;
 import com.swingdating.Components.DropDownMenu;
 import com.swingdating.System.AppDesign;
-import com.swingdating.System.AppUserEnums.APU_EyeColor;
 import com.swingdating.System.AppUserEnums.APU_FavoriteSubject;
 
 public class RST_FavoriteSubject extends RST_Layout {
